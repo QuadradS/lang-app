@@ -16,7 +16,7 @@ export const Card = ({word, onLearn, disableBlure}) => {
 
   const onToggleOffBlur = () => !disableBlure && setBlurred(blurred ? null : second)
 
-  const status = classNames('w-[20px] h-[20px] rounded-[50%] absolute left-[10px] top-[10px]', {
+  const status = classNames('w-[10px] h-[10px] rounded-[50%] absolute left-[10px] top-[10px]', {
     'bg-[tomato]': word.status === wordStatuses.unlearned,
     'bg-[#009688]': word.status === wordStatuses.learned,
     'bg-[#FFEB3B]': word.status === wordStatuses.inProgress,

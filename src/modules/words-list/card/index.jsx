@@ -22,7 +22,7 @@ export const Card = ({word}) => {
     })
   }, [editMode]);
 
-  const status = classNames('w-[20px] h-[20px] rounded-[50%] absolute left-[5px] top-[5px]', {
+  const status = classNames('w-[10px] h-[10px] rounded-[50%] absolute left-[5px] top-[5px]', {
     'bg-[tomato]': word.status === wordStatuses.unlearned,
     'bg-[#009688]': word.status === wordStatuses.learned,
     'bg-[#FFEB3B]': word.status === wordStatuses.inProgress,
