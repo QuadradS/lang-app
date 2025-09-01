@@ -16,7 +16,7 @@ export const Card = ({word, onLearn, disableBlure}) => {
 
   const onToggleOffBlur = () => !disableBlure && setBlurred(blurred ? null : second)
 
-  const status = classNames('w-[20px] h-[20px] rounded-[50%]', {
+  const status = classNames('w-[20px] h-[20px] rounded-[50%] absolute left-[10px] top-[10px]', {
     'bg-[tomato]': word.status === wordStatuses.unlearned,
     'bg-[#009688]': word.status === wordStatuses.learned,
     'bg-[#FFEB3B]': word.status === wordStatuses.inProgress,
@@ -27,16 +27,23 @@ export const Card = ({word, onLearn, disableBlure}) => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    const value = data.checkWord;
+    const value = data.checkWord
+      .toLowerCase()
+      .split(',')
+      .filter(Boolean);
     const _word = word.word.toLowerCase();
-    const _wordTranslate = word.wordTranslate.toLowerCase();
+    const _wordTranslate = word.wordTranslate
+      .toLowerCase()
+      .split(',')
+      .filter(Boolean)
+      .map((v) => v.trim())
 
-    if(blurred === first && !_word.includes(value)) {
+    if (blurred === first && !value.includes(_word)) {
       setAnswerStatus('incorrect')
       return
     }
 
-    if(blurred === second && !_wordTranslate.includes(value)) {
+    if (blurred === second && !value.some((v) => _wordTranslate.includes(v))) {
       setAnswerStatus('incorrect')
       return
     }
@@ -50,34 +57,38 @@ export const Card = ({word, onLearn, disableBlure}) => {
     <div className="w-full bg-white rounded-[2px] p-2 shadow-[0px_0px_3px_1px_#cdcdcd82] cursor-pointer relative">
       <div className={status}/>
 
-      <div onClick={onToggleOffBlur}>
+      <div onClick={onToggleOffBlur} className="h-[145px] overflow-hidden text-ellipsis">
         <div style={{filter: !disableBlure && `blur(${blurred === first ? 10 : 0}px)`}}
-             className="w-full text-center text-3xl mt-5 blured text-ellipsis overflow-hidden" title={word.word}>
+             className="w-full text-center text-xl mt-2 blured text-ellipsis overflow-hidden" title={word.word}>
           {word.word}
         </div>
-        <div className="w-full h-[1px] bg-[#dcdcdc] my-5"/>
+        <div className="w-full h-[1px] bg-[#dcdcdc] my-2"/>
         <div style={{filter: !disableBlure && `blur(${blurred === second ? 10 : 0}px)`}}
-             className="w-full text-center text-3xl mb-5 blured text-ellipsis overflow-hidden" title={word.wordTranslate}>
+             className="w-full text-center text-md mb-2 blured text-ellipsis overflow-hidden"
+             title={word.wordTranslate}>
           {word.wordTranslate}
         </div>
       </div>
 
-      {word.status === wordStatuses.inProgress && (
-        <form onSubmit={onCheckWord}>
-          <TextInput name="checkWord" label="Enter word"/>
-          <div className="mt-2">
+      {word.status === wordStatuses.inProgress && answerStatus !== 'correct' && (
+        <form onSubmit={onCheckWord} className="flex items-end">
+          <TextInput name="checkWord" placeholder="Word"/>
+          <div className="ml-2">
             <Button fullWidth disabled={answerStatus === 'correct'}>
               {answerStatus === 'correct' && 'Correct'}
               {answerStatus === 'incorrect' && 'Try again'}
               {!answerStatus && 'Check'}
             </Button>
           </div>
-          <div className="mt-2">
-            <Button disabled={answerStatus !== 'correct'} onClick={() => onLearn(word.id, wordStatuses.learned)}
-                    fullWidth>Mark as learned</Button>
-          </div>
         </form>
       )}
+
+      {word.status === wordStatuses.inProgress && answerStatus === 'correct' && (
+        <Button disabled={answerStatus !== 'correct'} onClick={() => onLearn(word.id, wordStatuses.learned)} fullWidth>
+          Mark as learned
+        </Button>
+      )}
+
 
       {word.status === wordStatuses.unlearned && (
         <div>

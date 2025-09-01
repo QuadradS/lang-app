@@ -57,7 +57,7 @@ export const WordsListModule = () => {
               </h1>
             )}
             {renderWords().map((w) => (
-              <div key={w.id} className="p-[5px] lg:w-[25%] w-[50%]">
+              <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">
                 <Card word={w}/>
               </div>
             ))}

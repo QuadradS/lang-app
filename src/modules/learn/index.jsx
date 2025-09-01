@@ -55,7 +55,7 @@ export const LearnModule = () => {
               </h1>
             )}
             {renderWords().map((w) => (
-              <div key={w.id} className="p-[5px] lg:w-[25%] w-[50%]">
+              <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">
                 <Card disableBlure={w.status !== wordStatuses.inProgress} onRemove={store.removeWord}
                       onLearn={store.markLearned} word={w}/>
               </div>
