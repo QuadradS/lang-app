@@ -4,5 +4,8 @@ import tailwindcss from "tailwindcss";
 
 export default defineConfig({
   base: '/lang-app/',
+  build: {
+    outDir: 'dist',
+  },
   plugins: [react(), tailwindcss()],
 })

@@ -14,14 +14,16 @@ let router = createBrowserRouter([
     Component: LearnModule,
     loader: () => <div>Wait</div>,
   },
-]);
+], {
+  basename: '/lang-app',
+});
 
 function App() {
 
   return (
     <>
       <StoreProvider>
-        <RouterProvider router={router} />,
+        <RouterProvider router={router}/>,
       </StoreProvider>
     </>
   )
