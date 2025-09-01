@@ -31,7 +31,12 @@ export const Card = ({word, onLearn, disableBlure}) => {
     const _word = word.word.toLowerCase();
     const _wordTranslate = word.wordTranslate.toLowerCase();
 
-    if (!_word.includes(value) && !_wordTranslate.includes(value)) {
+    if(blurred === first && !_word.includes(value)) {
+      setAnswerStatus('incorrect')
+      return
+    }
+
+    if(blurred === second && !_wordTranslate.includes(value)) {
       setAnswerStatus('incorrect')
       return
     }
