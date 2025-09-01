@@ -2,6 +2,7 @@ import "./index.css";
 import {useState} from "react";
 import {Button} from "../../../components/button/index.jsx";
 import classNames from "classnames";
+import {wordStatuses} from "../../../store/main.jsx";
 
 const first = "FIRST"
 const second = "SECOND"
@@ -12,9 +13,13 @@ export const Card = ({word, onRemove, onLearn}) => {
   const onToggleOffBlur = () => setBlurred(blurred ? null : second)
 
   const status = classNames('w-[20px] h-[20px] rounded-[50%]', {
-    'bg-[tomato]': !word.learned,
-    'bg-[#009688]': word.learned,
+    'bg-[tomato]': word.status === wordStatuses.unlearned,
+    'bg-[#009688]': word.status === wordStatuses.learned,
+    'bg-[#FFEB3B]': word.status === wordStatuses.inProgress,
   })
+
+  const onChangeStatus = (word) => () => onLearn(word.id, word.status === wordStatuses.learned ? wordStatuses.unlearned : wordStatuses.learned)
+
   return (
     <div className="w-full bg-white rounded-[2px] p-2 shadow-[0px_0px_3px_1px_#cdcdcd82] cursor-pointer relative">
       <div className={status}/>
@@ -32,10 +37,11 @@ export const Card = ({word, onRemove, onLearn}) => {
       </div>
       <div>
         <div className="mt-2">
-          <Button fullWidth onClick={() => onRemove(word.word)}>Remove</Button>
+          <Button fullWidth onClick={() => onRemove(word.id)}>Remove</Button>
         </div>
         <div className="mt-2">
-          <Button onClick={() => onLearn(word.word, !word.learned)} fullWidth>Mark as {word.learned ? 'learned' : 'unlearned'}</Button>
+          <Button onClick={onChangeStatus(word)} fullWidth>Mark
+            as {word.status === wordStatuses.learned ? 'unlearned' : 'learned'}</Button>
         </div>
       </div>
     </div>

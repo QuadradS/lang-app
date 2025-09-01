@@ -1,11 +1,18 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
+import {getMockedWords} from "./mock.js";
 
 const StoreContext = createContext();
 const localStorageKey = "LC_KEY"
 
+export const wordStatuses = {
+  learned: 'learned',
+  unlearned: 'unlearned',
+  inProgress: 'inProgress',
+}
+
 export const StoreProvider = ({children}) => {
   const [data, setData] = useState({
-    words: []
+    words: getMockedWords()
   });
 
   const syncLocalStorage = (s) => {
@@ -15,43 +22,30 @@ export const StoreProvider = ({children}) => {
   const addWord = ({word, wordTranslate}) => {
     const newStore = {
       ...data,
-      words: [...data.words, {word, wordTranslate, learned: false}]
+      words: {
+        ...data.words,
+        [Object.keys(data.words).length]: {word, wordTranslate, status: wordStatuses.unlearned}
+      }
     }
     setData(newStore)
     syncLocalStorage(newStore)
   }
 
-  const removeWord = (w) => {
-    const newStore = {
-      ...data,
-      words: data.words.filter(({word, wordTranslate}) => word !== w && wordTranslate !== w)
-    }
-
-    setData(newStore)
-
-    syncLocalStorage(newStore)
+  const removeWord = (wordId) => {
+    delete data.words[wordId]
+    setData({...data})
+    syncLocalStorage({...data})
   }
 
-  const markLearned = (w, learned) => {
-    const word = data.words.find((word) => word.word === w)
-    if (!word) {
-      return
+  const markLearned = (wordId, s) => {
+    if (data.words[wordId]?.status) {
+      data.words[wordId].status = s
     }
 
-    word.learned = learned
-    const filtered = data.words.filter(({word, wordTranslate}) => word !== w && wordTranslate !== w);
-
-    const newStore = {
-      ...data,
-      words: [...filtered, word]
-    }
-
-    console.log(newStore)
-
-    setData(newStore)
-
-    syncLocalStorage(newStore)
+    setData({...data})
+    syncLocalStorage({...data})
   }
+
 
   useEffect(() => {
     const savedStorageStr = localStorage.getItem(localStorageKey);

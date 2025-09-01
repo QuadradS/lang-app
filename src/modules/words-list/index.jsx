@@ -1,14 +1,34 @@
 import {MainLayout} from "../../components/layout/main-layout.jsx";
 import {Card} from "./card/index.jsx";
 import {AddWordModal} from "./add-word-modal/index.jsx";
-import {useStore} from "../../store/main.jsx";
+import {useStore, wordStatuses} from "../../store/main.jsx";
+import {Button} from "../../components/button/index.jsx";
+import {useState} from "react";
+
+const showWords = {
+  all: 'all',
+  learned: 'learned',
+  unlearned: 'unlearned',
+  inProgress: 'inProgress'
+}
 
 export const WordsListModule = () => {
   const store = useStore();
+  const [wordStatus, setWordStatus] = useState(showWords.all)
+  const onSetWordStatus = (s) => () => setWordStatus(s)
+
+  const renderWords = () => {
+    if (wordStatus === showWords.all) {
+      return Object.values(store.data.words)
+    }
+
+    return Object.values(store.data.words).filter(({status}) => status === wordStatus)
+  }
+
 
   return (
     <MainLayout>
-      <div className="relative pt-2">
+      <div className="relative pt-2 w-full">
 
         <h2 className="text-xl">Words list</h2>
 
@@ -16,10 +36,22 @@ export const WordsListModule = () => {
           <AddWordModal/>
         </div>
 
+        <div className="flex mt-3">
+          <div className="mr-3">
+            <Button onClick={onSetWordStatus(showWords.all)}>All words</Button>
+          </div>
+          <div className="mr-3">
+            <Button onClick={onSetWordStatus(showWords.unlearned)}>Unlearned</Button>
+          </div>
+          <div className="mr-3">
+            <Button onClick={onSetWordStatus(showWords.learned)}>Learned</Button>
+          </div>
+        </div>
+
         <div className="mx-[-5px] mt-3">
           <div className="flex flex-wrap">
-            {store.data.words.map((w) => (
-              <div key={w.word} className="p-[5px] lg:w-[25%] w-[50%]">
+            {renderWords().map((w) => (
+              <div key={w.id} className="p-[5px] lg:w-[25%] w-[50%]">
                 <Card onRemove={store.removeWord} onLearn={store.markLearned} word={w}/>
               </div>
             ))}
