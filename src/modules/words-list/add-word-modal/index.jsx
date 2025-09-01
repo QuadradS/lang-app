@@ -14,7 +14,6 @@ export const AddWordModal = () => {
     )
   }
 
-
   const onSave = (e) => {
     e.preventDefault();
 

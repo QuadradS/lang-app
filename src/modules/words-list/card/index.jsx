@@ -48,11 +48,11 @@ export const Card = ({word}) => {
         {!editMode && (
           <>
             <div>
-              <div className="w-full text-center text-3xl mt-5 blured">
+              <div className="w-full text-center text-3xl mt-5 blured text-ellipsis overflow-hidden" title={word.word}>
                 {word.word}
               </div>
               <div className="w-full h-[1px] bg-[#dcdcdc] my-5"/>
-              <div className="w-full text-center text-3xl mb-5 blured">
+              <div className="w-full text-center text-3xl mb-5 blured text-ellipsis overflow-hidden" title={word.wordTranslate}>
                 {word.wordTranslate}
               </div>
             </div>

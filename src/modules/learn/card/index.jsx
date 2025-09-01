@@ -27,11 +27,12 @@ export const Card = ({word, onLearn, disableBlure}) => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    const value = data.checkWord.toLowerCase();
+    const value = data.checkWord;
     const _word = word.word.toLowerCase();
     const _wordTranslate = word.wordTranslate.toLowerCase();
 
-    if (value !== _word && value !== _wordTranslate) {
+
+    if (!_word.includes(value) && !_wordTranslate.includes(_wordTranslate)) {
       setAnswerStatus('incorrect')
       return
     }
@@ -47,12 +48,12 @@ export const Card = ({word, onLearn, disableBlure}) => {
 
       <div onClick={onToggleOffBlur}>
         <div style={{filter: !disableBlure && `blur(${blurred === first ? 10 : 0}px)`}}
-             className="w-full text-center text-3xl mt-5 blured">
+             className="w-full text-center text-3xl mt-5 blured text-ellipsis overflow-hidden" title={word.word}>
           {word.word}
         </div>
         <div className="w-full h-[1px] bg-[#dcdcdc] my-5"/>
         <div style={{filter: !disableBlure && `blur(${blurred === second ? 10 : 0}px)`}}
-             className="w-full text-center text-3xl mb-5 blured">
+             className="w-full text-center text-3xl mb-5 blured text-ellipsis overflow-hidden" title={word.wordTranslate}>
           {word.wordTranslate}
         </div>
       </div>
@@ -68,7 +69,8 @@ export const Card = ({word, onLearn, disableBlure}) => {
             </Button>
           </div>
           <div className="mt-2">
-            <Button disabled={answerStatus !== 'correct'} onClick={() => onLearn(word.id, wordStatuses.learned)} fullWidth>Mark as learned</Button>
+            <Button disabled={answerStatus !== 'correct'} onClick={() => onLearn(word.id, wordStatuses.learned)}
+                    fullWidth>Mark as learned</Button>
           </div>
         </form>
       )}
