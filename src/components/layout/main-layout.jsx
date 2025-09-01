@@ -6,7 +6,7 @@ export const MainLayout = ({children}) => {
       <header className="w-full px-6 py-3 max-w-[1280px] mx-auto bg-white flex items-center">
         <h1 className="text-2xl">QL Dashboard</h1>
         <Link className="text-md ml-10" to="/">Main</Link>
-        <Link className="text-md ml-4" to="learn">Learn</Link>
+        <Link className="text-md ml-4" to="/learn">Learn</Link>
       </header>
       <div className="px-3 py-2 w-full min-h-[100vh] max-w-[1280px] mx-auto">
         {children}

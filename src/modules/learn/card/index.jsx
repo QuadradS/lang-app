@@ -31,8 +31,7 @@ export const Card = ({word, onLearn, disableBlure}) => {
     const _word = word.word.toLowerCase();
     const _wordTranslate = word.wordTranslate.toLowerCase();
 
-
-    if (!_word.includes(value) && !_wordTranslate.includes(_wordTranslate)) {
+    if (!_word.includes(value) && !_wordTranslate.includes(value)) {
       setAnswerStatus('incorrect')
       return
     }
