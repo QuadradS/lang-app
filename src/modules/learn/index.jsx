@@ -35,20 +35,25 @@ export const LearnModule = () => {
       <div className="relative pt-2 w-full">
         <h2 className="text-xl">Learn words</h2>
 
-        <div className="flex mt-3">
-          <div className="mr-3">
+        <div className="flex mt-3 flex-wrap">
+          <div className="mr-3 mb-2">
             <Button onClick={onSetStatus(showWords.inProgress)}>Learning words</Button>
           </div>
-          <div className="mr-3">
+          <div className="mr-3 mb-2">
             <Button onClick={onSetStatus(showWords.learned)}>Add new words</Button>
           </div>
-          <div className="mr-3">
+          <div className="mr-3 mb-2">
             <Button onClick={onSetStatus(showWords.unlearned)}>Repeat learned words</Button>
           </div>
         </div>
 
         <div className="mx-[-5px] mt-3">
           <div className="flex flex-wrap">
+            {!renderWords().length && (
+              <h1 className="text-2xl text-center mx-auto">
+                Empty words list
+              </h1>
+            )}
             {renderWords().map((w) => (
               <div key={w.id} className="p-[5px] lg:w-[25%] w-[50%]">
                 <Card disableBlure={w.status !== wordStatuses.inProgress} onRemove={store.removeWord}

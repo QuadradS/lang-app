@@ -12,7 +12,7 @@ export const wordStatuses = {
 
 export const StoreProvider = ({children}) => {
   const [data, setData] = useState({
-    words: getMockedWords()
+    words: []
   });
 
   const syncLocalStorage = (s) => {
@@ -24,7 +24,7 @@ export const StoreProvider = ({children}) => {
       ...data,
       words: {
         ...data.words,
-        [Object.keys(data.words).length]: {word, wordTranslate, status: wordStatuses.unlearned}
+        [Object.keys(data.words).length]: {id: Object.keys(data.words).length, word, wordTranslate, status: wordStatuses.unlearned}
       }
     }
     setData(newStore)
@@ -46,6 +46,20 @@ export const StoreProvider = ({children}) => {
     syncLocalStorage({...data})
   }
 
+  const updateWord = (w) => {
+    if (!data.words[w.id]) {
+      return
+    }
+
+    data.words[w.id] = {
+      ...data.words[w.wordId],
+      ...w,
+    }
+
+    setData({...data})
+    syncLocalStorage({...data})
+  }
+
 
   useEffect(() => {
     const savedStorageStr = localStorage.getItem(localStorageKey);
@@ -58,7 +72,7 @@ export const StoreProvider = ({children}) => {
 
 
   return (
-    <StoreContext.Provider value={{data, addWord, removeWord, markLearned}}>
+    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord}}>
       {children}
     </StoreContext.Provider>
   );

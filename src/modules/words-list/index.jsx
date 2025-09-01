@@ -48,11 +48,17 @@ export const WordsListModule = () => {
           </div>
         </div>
 
-        <div className="mx-[-5px] mt-3">
-          <div className="flex flex-wrap">
+        <div className="mx-[-5px] mt-3 w-full">
+          <div className="flex flex-wrap w-full">
+
+            {!renderWords().length && (
+              <h1 className="text-2xl text-center mx-auto">
+                Empty words list
+              </h1>
+            )}
             {renderWords().map((w) => (
               <div key={w.id} className="p-[5px] lg:w-[25%] w-[50%]">
-                <Card onRemove={store.removeWord} onLearn={store.markLearned} word={w}/>
+                <Card word={w}/>
               </div>
             ))}
           </div>

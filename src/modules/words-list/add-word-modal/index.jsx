@@ -14,6 +14,7 @@ export const AddWordModal = () => {
     )
   }
 
+
   const onSave = (e) => {
     e.preventDefault();
 
@@ -22,6 +23,7 @@ export const AddWordModal = () => {
 
     if (data.word && data.wordTranslate) {
       store.addWord({
+        id: Object.values(store.data?.words || {}).length,
         word: data.word,
         wordTranslate: data.wordTranslate
       })
@@ -37,22 +39,24 @@ export const AddWordModal = () => {
       <div className="fixed left-0 right-0 top-0 bottom-0 z-20 flex items-center justify-center bg-[#00000045]">
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
-        <div className="w-[500px] h-[500px] bg-[#f6f6fa] rounded relative z-10 p-4">
-          <h1 className="text-2xl">Add new word</h1>
+        <div className="p-4 w-full">
+          <div className="max-w-[500px] bg-[#f6f6fa] rounded relative z-10 p-4 w-full mx-auto">
+            <h1 className="text-2xl">Add new word</h1>
 
-          <form onSubmit={onSave} className="w-full">
-            <div className="mt-2">
-              <TextInput name={'word'} required label="Word"/>
-            </div>
+            <form onSubmit={onSave} className="w-full flex flex-wrap flex-col">
+              <div className="mt-2 w-full">
+                <TextInput name={'word'} required label="Word"/>
+              </div>
 
-            <div className="mt-2">
-              <TextInput name={'wordTranslate'} required label="Word translate"/>
-            </div>
+              <div className="mt-2 w-full">
+                <TextInput name={'wordTranslate'} required label="Word translate"/>
+              </div>
 
-            <div className="mt-2">
-              <Button fullWidth>Save</Button>
-            </div>
-          </form>
+              <div className="mt-6 w-full">
+                <Button fullWidth>Save</Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </>
