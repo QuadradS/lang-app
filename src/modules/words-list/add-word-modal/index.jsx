@@ -1,8 +1,8 @@
 import {useState} from "react";
-import {TextInput} from "../../../components/text-input/index.jsx";
 import {useStore} from "../../../store/main.jsx";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
+import {InputTextarea} from "primereact/inputtextarea";
 
 export const AddWordModal = () => {
   const [state, setState] = useState(false);
@@ -25,7 +25,8 @@ export const AddWordModal = () => {
       store.addWord({
         id: Object.values(store.data?.words || {}).length,
         word: data.word,
-        wordTranslate: data.wordTranslate
+        wordTranslate: data.wordTranslate,
+        example: data.example,
       })
     }
 
@@ -44,14 +45,9 @@ export const AddWordModal = () => {
             <h1 className="text-2xl mt-2">Add new word</h1>
 
             <form onSubmit={onSave} className="w-full flex flex-wrap flex-col">
-              <div className="mt-2 w-full">
-                <InputText placeholder="Word" className="w-full" name={'word'} required label="Word"/>
-              </div>
-
-              <div className="mt-2 w-full">
-                <InputText placeholder="Word translate" className="w-full" name={'wordTranslate'} required label="Word translate"/>
-              </div>
-
+              <InputText placeholder="Word" className="w-full mt-2" name={'word'} required label="Word"/>
+              <InputText placeholder="Word translate" className="w-full mt-2" name={'wordTranslate'} required label="Word translate"/>
+              <InputTextarea placeholder="Example" className="mt-2 w-full" name={'example'}/>
               <div className="mt-6 w-full">
                 <Button size="small">Save</Button>
               </div>

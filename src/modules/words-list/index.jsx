@@ -3,7 +3,9 @@ import {Card} from "./card/index.jsx";
 import {AddWordModal} from "./add-word-modal/index.jsx";
 import {useStore, wordStatuses} from "../../store/main.jsx";
 import {useState} from "react";
-import {Button} from "primereact/button";
+import {WordsTable} from "./words-table/index.jsx";
+import {TabMenu} from "primereact/tabmenu";
+import classNames from "classnames";
 
 const showWords = {
   all: 'all',
@@ -15,7 +17,6 @@ const showWords = {
 export const WordsListModule = () => {
   const store = useStore();
   const [wordStatus, setWordStatus] = useState(showWords.all)
-  const onSetWordStatus = (s) => () => setWordStatus(s)
 
   const renderWords = () => {
     if (wordStatus === showWords.all) {
@@ -25,6 +26,19 @@ export const WordsListModule = () => {
     return Object.values(store.data.words).filter(({status}) => status === wordStatus)
   }
 
+  const getValue = (v) => {
+    return classNames({
+      'All': v === showWords.all,
+      'Unleaned': v === showWords.unlearned,
+      'Learned': v === showWords.learned,
+      'In progress': v === showWords.inProgress,
+    })
+  }
+
+  const items = Object.values(showWords).map((v) => ({
+    label: getValue(v),
+    command: () => setWordStatus(v)
+  }))
 
   return (
     <MainLayout>
@@ -37,33 +51,29 @@ export const WordsListModule = () => {
         </div>
 
         <div className="flex mt-3">
-          <div className="mr-3">
-            <Button size="small" onClick={onSetWordStatus(showWords.all)}>All words</Button>
-          </div>
-          <div className="mr-3">
-            <Button size="small" onClick={onSetWordStatus(showWords.unlearned)}>Unlearned</Button>
-          </div>
-          <div className="mr-3">
-            <Button size="small" onClick={onSetWordStatus(showWords.learned)}>Learned</Button>
-          </div>
+          <TabMenu model={items}/>
         </div>
 
-        <div className="mx-[-5px] mt-3 w-full">
-          <div className="flex flex-wrap w-full">
-
-            {!renderWords().length && (
-              <h1 className="text-2xl text-center mx-auto">
-                Empty words list
-              </h1>
-            )}
-            {renderWords().map((w) => (
-              <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">
-                <Card word={w}/>
-              </div>
-            ))}
-          </div>
-
+        <div className="my-3">
+          <WordsTable words={renderWords()} onUpdateWord={store.updateWord}/>
         </div>
+
+        {/*<div className="mx-[-5px] mt-3 w-full">*/}
+        {/*  <div className="flex flex-wrap w-full">*/}
+
+        {/*    {!renderWords().length && (*/}
+        {/*      <h1 className="text-2xl text-center mx-auto">*/}
+        {/*        Empty words list*/}
+        {/*      </h1>*/}
+        {/*    )}*/}
+        {/*    {renderWords().map((w) => (*/}
+        {/*      <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">*/}
+        {/*        <Card word={w}/>*/}
+        {/*      </div>*/}
+        {/*    ))}*/}
+        {/*  </div>*/}
+
+        {/*</div>*/}
       </div>
     </MainLayout>
 

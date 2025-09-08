@@ -29,6 +29,7 @@ export const LearnModule = () => {
     return []
   }
 
+  console.log(store)
 
   return (
     <MainLayout>

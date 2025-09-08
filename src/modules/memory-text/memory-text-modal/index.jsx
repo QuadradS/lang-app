@@ -1,8 +1,10 @@
-import {Button} from "../../../components/button/index.jsx";
 import {useState} from "react";
 import {TextAreaField} from "../../../components/text-area/index.jsx";
 import {useStore} from "../../../store/main.jsx";
-import {TextInput} from "../../../components/text-input/index.jsx";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
+import {Tag} from "primereact/tag";
+import {InputTextarea} from "primereact/inputtextarea";
 
 export const MemoryTextModal = () => {
   const [state, setState] = useState(false);
@@ -15,7 +17,7 @@ export const MemoryTextModal = () => {
 
   if (!state) {
     return (
-      <Button onClick={setModalState(true)}>Add new memory text</Button>
+      <Button size="small" onClick={setModalState(true)}>Add new memory text</Button>
     )
   }
 
@@ -35,7 +37,7 @@ export const MemoryTextModal = () => {
 
   return (
     <>
-      <Button onClick={setModalState(false)}>Close</Button>
+      <Button size="small" onClick={setModalState(false)}>Close</Button>
       <div className="fixed left-0 right-0 top-0 bottom-0 z-20 flex items-center justify-center bg-[#00000045]">
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
@@ -44,25 +46,25 @@ export const MemoryTextModal = () => {
             <h1 className="text-2xl">Add new memory text</h1>
 
             <form className="mt-2" onSubmit={onCreateMemoryText}>
-              <TextInput label='memory text title' value={title} onChange={(e) => setTitle(e.target.value)} required/>
-              <TextAreaField value={value} onChange={(e) => setValue(e.target.value)} name="memoryText" required
-                             rows={5} label="Memory text"/>
+              <InputText className="w-full" placeholder='memory text title' value={title} onChange={(e) => setTitle(e.target.value)}
+                         required/>
+              <InputTextarea className="w-full mt-2" value={value} onChange={(e) => setValue(e.target.value)} name="memoryText" required
+                             rows={5} placeholder="Memory text"/>
 
               <div>
-                <h2>Add word:</h2>
+                <h2 className="mb-0">Add word:</h2>
 
                 <div className="flex flex-wrap max-h-[100px] overflow-y-auto overflow-x-hidden">
                   {Object.values(data.words).map((v) => (
                     <div key={v.id} className="mt-1 ml-1">
-                      <button onClick={onChooseWord(v)} type="button"
-                              className="cursor-pointer bg-transparent px-2 py-0 rounded-lg border-[1px] border-[#0035f6] text-[#0035f6]">{v.word}</button>
+                      <Tag onClick={onChooseWord(v)} severity="info" className="cursor-pointer">{v.word}</Tag>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="mt-2">
-                <Button>Submit</Button>
+                <Button size="small">Submit</Button>
               </div>
             </form>
 

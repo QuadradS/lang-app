@@ -92,8 +92,9 @@ export const Card = ({word, onLearn, disableBlure}) => {
       </div>
 
       <div className="h-[140px] overflow-hidden text-ellipsis">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore magni minima minus modi nesciunt nihil qui.
-          Accusamus cum dolorem, ipsa iure nesciunt reiciendis? Dicta dolore ea earum iste nobis voluptatibus?</p>
+        {!!word.example && (
+          <p>{word.example}</p>
+        )}
       </div>
 
       {/*{word.status === wordStatuses.inProgress && answerStatus !== 'correct' && (*/}

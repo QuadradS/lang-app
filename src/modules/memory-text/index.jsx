@@ -3,14 +3,15 @@ import {MemoryTextModal} from "./memory-text-modal/index.jsx";
 import {useStore} from "../../store/main.jsx";
 import {ViewMemoryTextModal} from "./view-memory-text-modal/index.jsx";
 import {useState} from "react";
-import {Popover} from "../../components/popover/index.jsx";
+import {Card} from "primereact/card";
+import {Chip} from "primereact/chip";
+import {Tag} from "primereact/tag";
+import {Tooltip} from "primereact/tooltip";
 
 export const MemoryText = () => {
   const store = useStore()
   const [selected, setSelected] = useState(null)
 
-  console.log(store)
-  console.log(selected)
   return (
 
     <MainLayout>
@@ -29,20 +30,17 @@ export const MemoryText = () => {
 
           <ViewMemoryTextModal isOpen={!!selected} memoryText={selected} onClose={() => setSelected(false)}/>
 
+
           {Object.values(store.data.memoryTexts || {}).map((t) => (
             <div key={t.id} className="p-[5px] lg:w-[20%] w-[50%]" onClick={() => setSelected(t)}>
-              <div
-                className="w-full bg-white rounded-[2px] p-2 shadow-[0px_0px_3px_1px_#cdcdcd82] cursor-pointer relative ">
-
-                <h2 className="text-xl">{t.title}</h2>
-
-                <div className="my-2 w-full h-[1px] bg-[#dcdcdc] "/>
-
+              <Card
+                title={t.title}
+                className="w-full relative ">
                 <div className="text-sm flex flex-wrap h-[140px] overflow-hidden text-ellipsis content-start justify-start">
                   {t.text.split(' ').map((w) => (
                     <>
                       {t.usedWords[w] && (
-                        <span className={`mx-1 mt-1 bg-black text-white px-1 rounded`}>{t.usedWords[w].wordTranslate}</span>
+                        <Tag value={t.usedWords[w].wordTranslate}/>
                       )}
 
                       {!t.usedWords[w] && (
@@ -51,7 +49,7 @@ export const MemoryText = () => {
                     </>
                   ))}
                 </div>
-              </div>
+              </Card>
             </div>
           ))}
         </div>

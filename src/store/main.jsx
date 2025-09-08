@@ -31,7 +31,7 @@ export const StoreProvider = ({children}) => {
     syncLocalStorage(newStore)
   }
 
-  const addWord = ({word, wordTranslate}) => {
+  const addWord = ({word, wordTranslate, example}) => {
     const newStore = {
       ...data,
       words: {
@@ -40,7 +40,8 @@ export const StoreProvider = ({children}) => {
           id: Object.keys(data.words).length,
           word,
           wordTranslate,
-          status: wordStatuses.unlearned
+          status: wordStatuses.unlearned,
+          example
         }
       }
     }
