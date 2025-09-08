@@ -3,6 +3,8 @@ import {useStore, wordStatuses} from "../../store/main.jsx";
 import {useState} from "react";
 import {Card} from "./card/index.jsx";
 import {Button} from "primereact/button";
+import {TabMenu} from "primereact/tabmenu";
+import classNames from "classnames";
 
 export const showWords = {
   learned: 'learned',
@@ -21,31 +23,49 @@ export const LearnModule = () => {
       return Object.values(store.data.words).filter(({status}) => status === wordStatuses.inProgress)
     }
     if(currentStatus === showWords.learned) {
-      return Object.values(store.data.words).filter(({status}) => status === wordStatuses.unlearned)
+      return Object.values(store.data.words).filter(({status}) => status === wordStatuses.learned)
     }
     if(currentStatus === showWords.unlearned) {
-      return Object.values(store.data.words).filter(({status}) => status === wordStatuses.learned)
+      return Object.values(store.data.words).filter(({status}) => status === wordStatuses.unlearned)
     }
     return []
   }
 
   console.log(store)
 
+  const getValue = (v) => {
+    return classNames({
+      'All': v === showWords.all,
+      'In progress': v === showWords.inProgress,
+      'Unleaned': v === showWords.unlearned,
+      'Learned': v === showWords.learned,
+    })
+  }
+
+  const items = Object.values(showWords).map((v) => ({
+    label: getValue(v),
+    command: () => setStatus(v)
+  }))
+
   return (
     <MainLayout>
       <div className="relative pt-2 w-full">
         <h2 className="text-xl">Learn words</h2>
 
-        <div className="flex mt-3 flex-wrap">
-          <div className="mr-3 mb-2">
-            <Button size="small" onClick={onSetStatus(showWords.inProgress)}>Learning words</Button>
-          </div>
-          <div className="mr-3 mb-2">
-            <Button size="small" onClick={onSetStatus(showWords.learned)}>Add new words</Button>
-          </div>
-          <div className="mr-3 mb-2">
-            <Button size="small" onClick={onSetStatus(showWords.unlearned)}>Repeat learned words</Button>
-          </div>
+        {/*<div className="flex mt-3 flex-wrap">*/}
+        {/*  <div className="mr-3 mb-2">*/}
+        {/*    <Button size="small" onClick={onSetStatus(showWords.inProgress)}>Learning words</Button>*/}
+        {/*  </div>*/}
+        {/*  <div className="mr-3 mb-2">*/}
+        {/*    <Button size="small" onClick={onSetStatus(showWords.learned)}>Add new words</Button>*/}
+        {/*  </div>*/}
+        {/*  <div className="mr-3 mb-2">*/}
+        {/*    <Button size="small" onClick={onSetStatus(showWords.unlearned)}>Repeat learned words</Button>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
+
+        <div className="flex mt-3">
+          <TabMenu model={items}/>
         </div>
 
         <div className="mx-[-5px] mt-3">
