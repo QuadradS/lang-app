@@ -2,8 +2,8 @@ import {MainLayout} from "../../components/layout/main-layout.jsx";
 import {Card} from "./card/index.jsx";
 import {AddWordModal} from "./add-word-modal/index.jsx";
 import {useStore, wordStatuses} from "../../store/main.jsx";
-import {Button} from "../../components/button/index.jsx";
 import {useState} from "react";
+import {Button} from "primereact/button";
 
 const showWords = {
   all: 'all',
@@ -38,13 +38,13 @@ export const WordsListModule = () => {
 
         <div className="flex mt-3">
           <div className="mr-3">
-            <Button onClick={onSetWordStatus(showWords.all)}>All words</Button>
+            <Button size="small" onClick={onSetWordStatus(showWords.all)}>All words</Button>
           </div>
           <div className="mr-3">
-            <Button onClick={onSetWordStatus(showWords.unlearned)}>Unlearned</Button>
+            <Button size="small" onClick={onSetWordStatus(showWords.unlearned)}>Unlearned</Button>
           </div>
           <div className="mr-3">
-            <Button onClick={onSetWordStatus(showWords.learned)}>Learned</Button>
+            <Button size="small" onClick={onSetWordStatus(showWords.learned)}>Learned</Button>
           </div>
         </div>
 

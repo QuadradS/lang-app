@@ -1,8 +1,8 @@
 import {MainLayout} from "../../components/layout/main-layout.jsx";
-import {Button} from "../../components/button/index.jsx";
 import {useStore, wordStatuses} from "../../store/main.jsx";
 import {useState} from "react";
 import {Card} from "./card/index.jsx";
+import {Button} from "primereact/button";
 
 export const showWords = {
   learned: 'learned',
@@ -37,13 +37,13 @@ export const LearnModule = () => {
 
         <div className="flex mt-3 flex-wrap">
           <div className="mr-3 mb-2">
-            <Button onClick={onSetStatus(showWords.inProgress)}>Learning words</Button>
+            <Button size="small" onClick={onSetStatus(showWords.inProgress)}>Learning words</Button>
           </div>
           <div className="mr-3 mb-2">
-            <Button onClick={onSetStatus(showWords.learned)}>Add new words</Button>
+            <Button size="small" onClick={onSetStatus(showWords.learned)}>Add new words</Button>
           </div>
           <div className="mr-3 mb-2">
-            <Button onClick={onSetStatus(showWords.unlearned)}>Repeat learned words</Button>
+            <Button size="small" onClick={onSetStatus(showWords.unlearned)}>Repeat learned words</Button>
           </div>
         </div>
 

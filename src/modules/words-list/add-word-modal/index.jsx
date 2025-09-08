@@ -1,7 +1,8 @@
 import {useState} from "react";
-import {Button} from "../../../components/button/index.jsx";
 import {TextInput} from "../../../components/text-input/index.jsx";
 import {useStore} from "../../../store/main.jsx";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
 
 export const AddWordModal = () => {
   const [state, setState] = useState(false);
@@ -10,7 +11,7 @@ export const AddWordModal = () => {
 
   if (!state) {
     return (
-      <Button onClick={setModalState(true)}>Add new word</Button>
+      <Button size="small" onClick={setModalState(true)}>Add new word</Button>
     )
   }
 
@@ -39,20 +40,20 @@ export const AddWordModal = () => {
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
         <div className="p-4 w-full">
-          <div className="max-w-[500px] bg-[#f6f6fa] rounded relative z-10 p-4 w-full mx-auto">
-            <h1 className="text-2xl">Add new word</h1>
+          <div className="max-w-[500px] bg-[#f6f6fa] rounded relative z-10 p-4 py-2 w-full mx-auto">
+            <h1 className="text-2xl mt-2">Add new word</h1>
 
             <form onSubmit={onSave} className="w-full flex flex-wrap flex-col">
               <div className="mt-2 w-full">
-                <TextInput name={'word'} required label="Word"/>
+                <InputText placeholder="Word" className="w-full" name={'word'} required label="Word"/>
               </div>
 
               <div className="mt-2 w-full">
-                <TextInput name={'wordTranslate'} required label="Word translate"/>
+                <InputText placeholder="Word translate" className="w-full" name={'wordTranslate'} required label="Word translate"/>
               </div>
 
               <div className="mt-6 w-full">
-                <Button fullWidth>Save</Button>
+                <Button size="small">Save</Button>
               </div>
             </form>
           </div>

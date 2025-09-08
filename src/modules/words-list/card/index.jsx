@@ -1,9 +1,10 @@
 import "./index.css";
-import {Button} from "../../../components/button/index.jsx";
 import classNames from "classnames";
 import {useStore, wordStatuses} from "../../../store/main.jsx";
 import {useEffect, useState} from "react";
-import {TextInput} from "../../../components/text-input/index.jsx";
+import {Card as CardComponent} from "primereact/card";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
 
 
 export const Card = ({word}) => {
@@ -40,57 +41,38 @@ export const Card = ({word}) => {
     setEditMode(false)
   }
 
-  return (
-    <div className="w-full bg-white rounded-[2px] p-2 shadow-[0px_0px_3px_1px_#cdcdcd82] cursor-pointer relative">
-      <div className={status} />
-
-      <div className="flex-col flex justify-between">
+  const footer = () => {
+    return (
+      <>
         {!editMode && (
-          <>
-            <div className="h-[135px]">
-              <div className="w-full text-center text-xl mt-2 blured text-ellipsis overflow-hidden" title={word.word}>
-                {word.word}
-              </div>
-              <div className="w-full h-[1px] bg-[#dcdcdc] my-2"/>
-              <div className="w-full text-center text-md mb-2 blured text-ellipsis overflow-hidden" title={word.wordTranslate}>
-                {word.wordTranslate}
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <div className="mt-2 w-[49%]">
-                <Button fullWidth onClick={() => store.removeWord(word.id)}>Remove</Button>
-              </div>
-              <div className="mt-2 w-[49%]">
-                <Button onClick={() => setEditMode(true)} fullWidth>Edit</Button>
-              </div>
-            </div>
-          </>
+          <div className="flex">
+            <Button icon="pi pi-pencil" aria-label="Filter" className="mr-2" onClick={() => setEditMode(true)} />
+            <Button icon="pi pi-trash" aria-label="Filter" severity="danger" onClick={() => store.removeWord(word.id)} />
+          </div>
         )}
+      </>
+    )
+  }
 
-        {editMode && (
-          <>
-            <form className="mt-3" onSubmit={onUpdate}>
-              <div className="mt-2">
-                <TextInput required onChange={onInput('word')} value={values.word}/>
-              </div>
-              <div className="mt-4">
-                <TextInput required onChange={onInput('wordTranslate')} value={values.wordTranslate}/>
-              </div>
+  return (
+    <CardComponent footer={footer} title={word.word} subTitle={word.wordTranslate} className="relative">
+      <div className={status}/>
+      {editMode && (
+        <form onSubmit={onUpdate}>
+          <div className="mt-1">
+            <InputText required onChange={onInput('word')} value={values.word}/>
+          </div>
+          <div className="mt-1">
+            <InputText required onChange={onInput('wordTranslate')} value={values.wordTranslate}/>
+          </div>
 
-              <div className="flex justify-between mt-[45px]">
-                <div className="w-[49%]">
-                  <Button type={'submit'} fullWidth>Apply</Button>
-                </div>
-                <div className="w-[49%]">
-                  <Button type="button" fullWidth onClick={() => setEditMode(false)}>Cancel</Button>
-                </div>
-              </div>
-            </form>
+          <div className="flex mt-2">
+            <Button icon="pi pi-check" aria-label="Filter"/>
+            <Button icon="pi pi-times" className="ml-2" severity="danger" aria-label="Cancel"/>
+          </div>
+        </form>
+      )}
 
-          </>
-        )}
-      </div>
-
-    </div>
+    </CardComponent>
   )
 }

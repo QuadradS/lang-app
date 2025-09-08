@@ -1,16 +1,15 @@
 import "./index.css";
 import {useState} from "react";
 import classNames from "classnames";
-import {TextInput} from "../../../components/text-input/index.jsx";
 import {wordStatuses} from "../../../store/main.jsx";
-import {Button} from "../../../components/button/index.jsx";
+import {Button} from "primereact/button";
+import {Card as CardComponent} from "primereact/card";
 
 const first = "FIRST"
 const second = "SECOND"
 
 export const Card = ({word, onLearn, disableBlure}) => {
-  const random = Math.round(Math.random() * 10)
-  const [blurred, setBlurred] = useState(random < 5 ? first : second)
+  const [blurred, setBlurred] = useState(second)
 
   const [answerStatus, setAnswerStatus] = useState()
 
@@ -52,60 +51,65 @@ export const Card = ({word, onLearn, disableBlure}) => {
     setBlurred(false)
   }
 
+  const Footer = () => {
+    return (
+      <>
+        {word.status === wordStatuses.inProgress && (
+          <Button className="w-full text-center block mt-1" size="small"
+                  onClick={() => onLearn(word.id, wordStatuses.learned)} fullWidth>
+            Mark as learned
+          </Button>
+        )}
+
+
+        {word.status === wordStatuses.unlearned && (
+          <Button className="w-full text-center block mt-1" size="small"
+                  onClick={() => onLearn(word.id, wordStatuses.inProgress)} fullWidth>
+            Start learn
+          </Button>
+        )}
+
+        {word.status === wordStatuses.learned && (
+          <Button className="w-full text-center block mt-1" size="small"
+                  onClick={() => onLearn(word.id, wordStatuses.inProgress)} fullWidth>
+            Repeat word
+          </Button>
+        )}
+      </>
+    )
+  }
+
 
   return (
-    <div className="w-full bg-white rounded-[2px] p-2 shadow-[0px_0px_3px_1px_#cdcdcd82] cursor-pointer relative">
+    <CardComponent footer={Footer} className="relative" title={word.word}>
       <div className={status}/>
 
-      <div onClick={onToggleOffBlur} className="h-[145px] overflow-hidden text-ellipsis">
-        <div style={{filter: !disableBlure && `blur(${blurred === first ? 10 : 0}px)`}}
-             className="w-full text-center text-xl mt-2 blured text-ellipsis overflow-hidden" title={word.word}>
-          {word.word}
-        </div>
-        <div className="w-full h-[1px] bg-[#dcdcdc] my-2"/>
-        <div style={{filter: !disableBlure && `blur(${blurred === second ? 10 : 0}px)`}}
-             className="w-full text-center text-md mb-2 blured text-ellipsis overflow-hidden"
-             title={word.wordTranslate}>
-          {word.wordTranslate}
-        </div>
+
+      <div onClick={onToggleOffBlur} style={{filter: !disableBlure && `blur(${blurred === second ? 10 : 0}px)`}}
+           className="w-full text-center text-md mb-2 blured text-ellipsis overflow-hidden"
+           title={word.wordTranslate}>
+        {word.wordTranslate}
       </div>
 
-      {word.status === wordStatuses.inProgress && answerStatus !== 'correct' && (
-        <form onSubmit={onCheckWord} className="flex items-end">
-          <TextInput name="checkWord" placeholder="Word"/>
-          <div className="ml-2">
-            <Button fullWidth disabled={answerStatus === 'correct'}>
-              {answerStatus === 'correct' && 'Correct'}
-              {answerStatus === 'incorrect' && 'Try again'}
-              {!answerStatus && 'Check'}
-            </Button>
-          </div>
-        </form>
-      )}
+      <div className="h-[140px] overflow-hidden text-ellipsis">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore magni minima minus modi nesciunt nihil qui.
+          Accusamus cum dolorem, ipsa iure nesciunt reiciendis? Dicta dolore ea earum iste nobis voluptatibus?</p>
+      </div>
 
-      {word.status === wordStatuses.inProgress && answerStatus === 'correct' && (
-        <Button disabled={answerStatus !== 'correct'} onClick={() => onLearn(word.id, wordStatuses.learned)} fullWidth>
-          Mark as learned
-        </Button>
-      )}
+      {/*{word.status === wordStatuses.inProgress && answerStatus !== 'correct' && (*/}
+      {/*  <form onSubmit={onCheckWord} className="flex items-end">*/}
+      {/*    <InputText name="checkWord" placeholder="Word"/>*/}
+      {/*    <div className="ml-2">*/}
+      {/*      <Button size="small" fullWidth disabled={answerStatus === 'correct'}>*/}
+      {/*        {answerStatus === 'correct' && 'Correct'}*/}
+      {/*        {answerStatus === 'incorrect' && 'Try again'}*/}
+      {/*        {!answerStatus && 'Check'}*/}
+      {/*      </Button>*/}
+      {/*    </div>*/}
+      {/*  </form>*/}
+      {/*)}*/}
 
 
-      {word.status === wordStatuses.unlearned && (
-        <div>
-          <div className="mt-2">
-            <Button onClick={() => onLearn(word.id, wordStatuses.inProgress)} fullWidth>Start learn</Button>
-          </div>
-        </div>
-      )}
-
-      {word.status === wordStatuses.learned && (
-        <div>
-          <div className="mt-2">
-            <Button onClick={() => onLearn(word.id, wordStatuses.inProgress)} fullWidth>Repeat word</Button>
-          </div>
-        </div>
-      )}
-
-    </div>
+    </CardComponent>
   )
 }

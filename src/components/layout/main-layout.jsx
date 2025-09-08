@@ -1,12 +1,23 @@
-import {Link} from "react-router";
+import { Menubar } from 'primereact/menubar';
 
 export const MainLayout = ({children}) => {
+  const items = [
+    {
+      label: 'Manage words',
+      icon: 'pi pi-home',
+      url: '/'
+
+    },
+    {
+      label: 'Learn',
+      icon: 'pi pi-star',
+      url: "/lang-app/learn"
+    },
+  ];
   return (
-    <main className="relative bg-[#f6f6fa]">
-      <header className="w-full px-6 py-3 max-w-[1280px] mx-auto bg-white flex items-center">
-        <h1 className="text-2xl">QL Dashboard</h1>
-        <Link className="text-md ml-10" to="/learn">Learn</Link>
-        <Link className="text-md ml-4" to="/">Manage words</Link>
+    <main className="relative">
+      <header className="w-full max-w-[1280px] mx-auto ">
+        <Menubar model={items} />
       </header>
       <div className="px-3 py-2 w-full min-h-[100vh] max-w-[1280px] mx-auto">
         {children}

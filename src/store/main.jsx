@@ -1,5 +1,4 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
-import {getMockedWords} from "./mock.js";
 
 const StoreContext = createContext();
 const localStorageKey = "LC_KEY"
@@ -12,11 +11,24 @@ export const wordStatuses = {
 
 export const StoreProvider = ({children}) => {
   const [data, setData] = useState({
-    words: []
+    words: {},
+    memoryTexts: {}
   });
 
   const syncLocalStorage = (s) => {
     localStorage.setItem(localStorageKey, JSON.stringify(s))
+  }
+
+  const addMemoryText = (memoryText) => {
+    const newStore = {
+      ...data,
+      memoryTexts: {
+        ...data.memoryTexts,
+        [memoryText.id]: memoryText
+      }
+    }
+    setData(newStore)
+    syncLocalStorage(newStore)
   }
 
   const addWord = ({word, wordTranslate}) => {
@@ -24,7 +36,12 @@ export const StoreProvider = ({children}) => {
       ...data,
       words: {
         ...data.words,
-        [Object.keys(data.words).length]: {id: Object.keys(data.words).length, word, wordTranslate, status: wordStatuses.unlearned}
+        [Object.keys(data.words).length]: {
+          id: Object.keys(data.words).length,
+          word,
+          wordTranslate,
+          status: wordStatuses.unlearned
+        }
       }
     }
     setData(newStore)
@@ -72,7 +89,7 @@ export const StoreProvider = ({children}) => {
 
 
   return (
-    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord}}>
+    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord, addMemoryText}}>
       {children}
     </StoreContext.Provider>
   );
