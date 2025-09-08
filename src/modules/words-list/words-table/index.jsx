@@ -14,14 +14,17 @@ export const WordsTable = ({words, onUpdateWord}) => {
     {
       name: 'Unlearned',
       code: wordStatuses.unlearned,
+      value: wordStatuses.unlearned,
     },
     {
       name: 'In progress',
       code: wordStatuses.inProgress,
+      value: wordStatuses.inProgress,
     },
     {
       name: 'Learned',
       code: wordStatuses.learned,
+      value: wordStatuses.learned,
     }
   ]
 
@@ -47,7 +50,7 @@ export const WordsTable = ({words, onUpdateWord}) => {
         value={options.value}
         options={statuses}
         optionLabel="name"
-        onChange={(e) => options.editorCallback(e.code)}
+        onChange={(e) => options.editorCallback(e.value)}
         placeholder="Select a Status"
         itemTemplate={(option) => {
           return <Tag value={option.name} severity={getSeverity(option.code)}></Tag>;

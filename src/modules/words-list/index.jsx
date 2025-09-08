@@ -1,7 +1,6 @@
 import {MainLayout} from "../../components/layout/main-layout.jsx";
-import {Card} from "./card/index.jsx";
 import {AddWordModal} from "./add-word-modal/index.jsx";
-import {useStore, wordStatuses} from "../../store/main.jsx";
+import {useStore} from "../../store/main.jsx";
 import {useState} from "react";
 import {WordsTable} from "./words-table/index.jsx";
 import {TabMenu} from "primereact/tabmenu";
