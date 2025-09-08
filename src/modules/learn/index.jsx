@@ -5,6 +5,8 @@ import {Card} from "./card/index.jsx";
 import {Button} from "primereact/button";
 import {TabMenu} from "primereact/tabmenu";
 import classNames from "classnames";
+import {Sidebar} from "primereact/sidebar";
+import {WordSidebar} from "./sidebar/index.jsx";
 
 export const showWords = {
   learned: 'learned',
@@ -13,25 +15,23 @@ export const showWords = {
 }
 
 export const LearnModule = () => {
+  const [selectedWord, setSelectedWord] = useState(null)
   const [currentStatus, setStatus] = useState(showWords.inProgress)
-  const onSetStatus = (s) => () => setStatus(s)
 
   const store = useStore()
 
   const renderWords = () => {
-    if(currentStatus === showWords.inProgress) {
+    if (currentStatus === showWords.inProgress) {
       return Object.values(store.data.words).filter(({status}) => status === wordStatuses.inProgress)
     }
-    if(currentStatus === showWords.learned) {
+    if (currentStatus === showWords.learned) {
       return Object.values(store.data.words).filter(({status}) => status === wordStatuses.learned)
     }
-    if(currentStatus === showWords.unlearned) {
+    if (currentStatus === showWords.unlearned) {
       return Object.values(store.data.words).filter(({status}) => status === wordStatuses.unlearned)
     }
     return []
   }
-
-  console.log(store)
 
   const getValue = (v) => {
     return classNames({
@@ -47,8 +47,13 @@ export const LearnModule = () => {
     command: () => setStatus(v)
   }))
 
+  const onSelect = (w) => {
+    setSelectedWord(w)
+  }
+
   return (
     <MainLayout>
+      <WordSidebar selectedWord={selectedWord} onClose={() => setSelectedWord(null)} onLearn={store.markLearned}/>
       <div className="relative pt-2 w-full">
         <h2 className="text-xl">Learn words</h2>
 
@@ -65,7 +70,7 @@ export const LearnModule = () => {
         {/*</div>*/}
 
         <div className="flex mt-3">
-          <TabMenu model={items}/>
+          <TabMenu activeIndex={2} model={items}/>
         </div>
 
         <div className="mx-[-5px] mt-3">
@@ -77,7 +82,8 @@ export const LearnModule = () => {
             )}
             {renderWords().map((w) => (
               <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">
-                <Card disableBlure={w.status !== wordStatuses.inProgress} onRemove={store.removeWord}
+                <Card onClose={() => setSelectedWord(null)} onSelect={onSelect}
+                      disableBlure={w.status !== wordStatuses.inProgress} onRemove={store.removeWord}
                       onLearn={store.markLearned} word={w}/>
               </div>
             ))}

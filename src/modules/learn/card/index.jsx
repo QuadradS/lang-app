@@ -8,7 +8,7 @@ import {Card as CardComponent} from "primereact/card";
 const first = "FIRST"
 const second = "SECOND"
 
-export const Card = ({word, onLearn, disableBlure}) => {
+export const Card = ({word, onLearn, disableBlure, onSelect}) => {
   const [blurred, setBlurred] = useState(second)
 
   const [answerStatus, setAnswerStatus] = useState()
@@ -56,8 +56,8 @@ export const Card = ({word, onLearn, disableBlure}) => {
       <>
         {word.status === wordStatuses.inProgress && (
           <Button className="w-full text-center block mt-1" size="small"
-                  onClick={() => onLearn(word.id, wordStatuses.learned)} fullWidth>
-            Mark as learned
+                  onClick={() => onSelect(word)} fullWidth>
+            Show more
           </Button>
         )}
 
@@ -89,12 +89,6 @@ export const Card = ({word, onLearn, disableBlure}) => {
            className="w-full text-center text-md mb-2 blured text-ellipsis overflow-hidden"
            title={word.wordTranslate}>
         {word.wordTranslate}
-      </div>
-
-      <div className="h-[140px] overflow-hidden text-ellipsis">
-        {!!word.example && (
-          <p>{word.example}</p>
-        )}
       </div>
 
       {/*{word.status === wordStatuses.inProgress && answerStatus !== 'correct' && (*/}

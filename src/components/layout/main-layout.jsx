@@ -1,7 +1,7 @@
 import {Link} from "react-router";
 import {Button} from "primereact/button";
 import {useStore} from "../../store/main.jsx";
-import {downloadJson} from "../../utils/dom.jsx";
+import {downloadJson, loadAndSaveJsonToLocalStorage} from "../../utils/dom.js";
 
 export const MainLayout = ({children}) => {
 
@@ -10,6 +10,14 @@ export const MainLayout = ({children}) => {
   const onExport = () => {
     const json = JSON.stringify(store.data || {})
     downloadJson(json)
+  }
+
+  const onImport = () => {
+    loadAndSaveJsonToLocalStorage((d) => {
+      store.setStore(d)
+    })
+
+
   }
   return (
     <main className="relative">
@@ -25,7 +33,10 @@ export const MainLayout = ({children}) => {
             Memory texts
           </Button>
         </Link>
-        <Button onClick={onExport} size="small" className="ml-auto sm:flex-inline block" severity="secondary"  icon="pi pi-file-arrow-up" label="Export data"/>
+        <div className='flex flex-wrap justify-end'>
+          <Button onClick={onImport} size="small" className="ml-auto sm:flex-inline block mr-2" severity="info"  icon="pi pi-file-word" label="Import data"/>
+          <Button onClick={onExport} size="small" className="sm:flex-inline block" severity="secondary"  icon="pi pi-file-arrow-up" label="Export data"/>
+        </div>
       </header>
       <div className="px-3 py-2 w-full min-h-[100vh] max-w-[1280px] mx-auto">
         {children}

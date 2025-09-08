@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 
 const StoreContext = createContext();
-const localStorageKey = "LC_KEY"
+export const localStorageKey = "LC_KEY"
 
 export const wordStatuses = {
   learned: 'learned',
@@ -17,6 +17,11 @@ export const StoreProvider = ({children}) => {
 
   const syncLocalStorage = (s) => {
     localStorage.setItem(localStorageKey, JSON.stringify(s))
+  }
+
+  const setStore = (s) => {
+    setData(s)
+    syncLocalStorage(s)
   }
 
   const addMemoryText = (memoryText) => {
@@ -90,7 +95,7 @@ export const StoreProvider = ({children}) => {
 
 
   return (
-    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord, addMemoryText}}>
+    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord, addMemoryText, setStore}}>
       {children}
     </StoreContext.Provider>
   );

@@ -71,6 +71,13 @@ export const WordsTable = ({words, onUpdateWord}) => {
     return <Tag value={getValue(status)} severity={getSeverity(status)}></Tag>;
   }
 
+  const textBody = ({example}) => {
+    if(example?.length > 20) {
+      return `${example?.slice(0,20)} ...`
+    }
+    return example
+  }
+
   const onRowEditComplete = (e) => {
     onUpdateWord({
       ...e.newData
@@ -83,11 +90,10 @@ export const WordsTable = ({words, onUpdateWord}) => {
       <Column sortable field="word" header="Word" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
       <Column sortable field="wordTranslate" header="Word translate" editor={(options) => textEditor(options)}
               style={{width: '20%'}}/>
-      <Column sortable field="example" header="Word example" editor={(options) => textAreaEditor(options)}
+      <Column sortable field="example" body={textBody} header="Word example" editor={(options) => textAreaEditor(options)}
               style={{width: '20%'}}/>
       <Column sortable field="status" header="Status" body={statusBodyTemplate} editor={(options) => statusEditor(options)}
               style={{width: '20%'}}></Column>
-      {/*<Column field="price" header="Price" body={priceBodyTemplate} editor={(options) => priceEditor(options)} style={{ width: '20%' }}></Column>*/}
       <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}></Column>
     </DataTable>
   )
