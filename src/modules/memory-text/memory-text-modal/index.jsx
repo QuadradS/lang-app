@@ -1,10 +1,10 @@
 import {useState} from "react";
-import {TextAreaField} from "../../../components/text-area/index.jsx";
 import {useStore} from "../../../store/main.jsx";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {Tag} from "primereact/tag";
 import {InputTextarea} from "primereact/inputtextarea";
+// import {Editor} from "primereact/editor";
 
 export const MemoryTextModal = () => {
   const [state, setState] = useState(false);
@@ -50,6 +50,9 @@ export const MemoryTextModal = () => {
                          required/>
               <InputTextarea className="w-full mt-2" value={value} onChange={(e) => setValue(e.target.value)} name="memoryText" required
                              rows={5} placeholder="Memory text"/>
+
+              {/*<Editor className="w-full mt-2" value={value} onTextChange={(e) => setValue(e.htmlValue)} style={{ minHeight: '140px' }} />*/}
+
 
               <div>
                 <h2 className="mb-0">Add word:</h2>

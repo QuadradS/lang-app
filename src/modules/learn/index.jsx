@@ -51,9 +51,19 @@ export const LearnModule = () => {
     setSelectedWord(w)
   }
 
+  const onUpdate = (w) => {
+    store.updateWord(w)
+    setSelectedWord({...w})
+  }
+
   return (
     <MainLayout>
-      <WordSidebar selectedWord={selectedWord} onClose={() => setSelectedWord(null)} onLearn={store.markLearned}/>
+      <WordSidebar
+        onUpdate={onUpdate}
+        selectedWord={selectedWord}
+        onClose={() => setSelectedWord(null)}
+        onLearn={store.markLearned}
+      />
       <div className="relative pt-2 w-full">
         <h2 className="text-xl">Learn words</h2>
 
@@ -82,9 +92,10 @@ export const LearnModule = () => {
             )}
             {renderWords().map((w) => (
               <div key={w.id} className="p-[5px] lg:w-[20%] w-[50%]">
-                <Card onClose={() => setSelectedWord(null)} onSelect={onSelect}
-                      disableBlure={w.status !== wordStatuses.inProgress} onRemove={store.removeWord}
-                      onLearn={store.markLearned} word={w}/>
+                <Card
+                  onClose={() => setSelectedWord(null)} onSelect={onSelect}
+                  onLearn={store.markLearned} word={w}
+                />
               </div>
             ))}
           </div>
