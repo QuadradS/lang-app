@@ -7,6 +7,7 @@ import {TabMenu} from "primereact/tabmenu";
 import classNames from "classnames";
 import {Sidebar} from "primereact/sidebar";
 import {WordSidebar} from "./sidebar/index.jsx";
+import {LearnModal} from "./learn-modal/index.jsx";
 
 export const showWords = {
   learned: 'learned',
@@ -82,6 +83,12 @@ export const LearnModule = () => {
         <div className="flex mt-3">
           <TabMenu activeIndex={2} model={items}/>
         </div>
+
+        {currentStatus  === showWords.inProgress && (
+          <div className="mt-3">
+            <LearnModal/>
+          </div>
+        )}
 
         <div className="mx-[-5px] mt-3">
           <div className="flex flex-wrap">
