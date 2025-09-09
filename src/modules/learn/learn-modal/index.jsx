@@ -69,6 +69,9 @@ export const LearnModal = () => {
     setStatus('init')
   }
 
+  if(!currentWord) {
+    return null
+  }
 
   return (
     <>
