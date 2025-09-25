@@ -1,5 +1,5 @@
 import {Button} from "primereact/button";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Card} from "primereact/card";
 import {useStore, wordStatuses} from "../../../store/main.jsx";
 import {shuffleArray} from "../../../utils/data.js";
@@ -12,6 +12,7 @@ export const LearnModal = () => {
   const [selectedIndex, setIndex] = useState(0);
   const setModalState = (s) => () => setState(s)
   const store = useStore()
+  const nextButtonRef = useRef(null)
 
   const learningWords = Object.values(store.data.words).filter(({status}) => status === wordStatuses.inProgress)
 
@@ -32,7 +33,6 @@ export const LearnModal = () => {
   }
 
   const currentWord = learningWords[indexesArray[selectedIndex]]
-
 
 
   const onCheckWord = (e) => {
@@ -61,17 +61,20 @@ export const LearnModal = () => {
   }
 
   const onNextWord = () => {
-    if(selectedIndex === indexesArray.length - 1) {
+    if (selectedIndex === indexesArray.length - 1) {
       setStatus('finished')
       return
     }
     setIndex(selectedIndex + 1)
     setStatus('init')
+    nextButtonRef?.current?.focus();
   }
 
-  if(!currentWord) {
+  if (!currentWord) {
     return null
   }
+
+  console.log('nextButtonRef ', nextButtonRef)
 
   return (
     <>
@@ -85,7 +88,8 @@ export const LearnModal = () => {
             {answerStatus === 'finished' && (
               <Card>
                 <h1 className="text-center">That is for today!</h1>
-                <Button className="block text-center w-full max-w-[240px] mx-auto" onClick={() => setState(false)}>Close</Button>
+                <Button className="block text-center w-full max-w-[240px] mx-auto"
+                        onClick={() => setState(false)}>Close</Button>
               </Card>
             )}
 
@@ -110,15 +114,19 @@ export const LearnModal = () => {
 
                 {answerStatus !== 'correct' && (
                   <form onSubmit={onCheckWord}>
-                    <InputText name={'checkWord'} className='mx-auto block mt-4 w-full max-w-[220px]' placeholder='Word'/>
+                    <InputText name={'checkWord'} className='mx-auto block mt-4 w-full max-w-[220px]'
+                               placeholder='Word'/>
                     <Button size="small" className="mx-auto block mt-2 w-full max-w-[220px]">Submit</Button>
                   </form>
                 )}
 
-                {answerStatus === 'correct' && (
-                  <Button size="small" className="mx-auto block mt-4 w-full max-w-[220px]"
-                          onClick={onNextWord}>Next</Button>
-                )}
+                <Button
+                  visible={answerStatus === 'correct'}
+                  ref={nextButtonRef}
+                  size="small"
+                  className="mx-auto block mt-4 w-full max-w-[220px]"
+                  onClick={onNextWord}>Next</Button>
+
               </Card>
             )}
           </div>

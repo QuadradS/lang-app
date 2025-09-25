@@ -4,12 +4,14 @@ import {createHashRouter, RouterProvider} from "react-router";
 import {LearnModule} from "./modules/learn/index.jsx";
 import {MemoryText} from "./modules/memory-text/index.jsx";
 import { PrimeReactProvider } from 'primereact/api';
+import {WordsList} from "./modules/learn/words-list/index.jsx";
 
 
 const router = createHashRouter([
   { path: "/", Component: WordsListModule },
   { path: "/learn", Component: LearnModule },
   { path: "/memory-texts", Component: MemoryText },
+  { path: "/words/:groupId", Component: WordsList },
 ]);
 
 function App() {
@@ -17,7 +19,7 @@ function App() {
   return (
     <PrimeReactProvider>
       <StoreProvider>
-        <RouterProvider router={router}/>,
+        <RouterProvider router={router}/>
       </StoreProvider>
     </PrimeReactProvider>
   )

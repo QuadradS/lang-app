@@ -12,7 +12,13 @@ export const wordStatuses = {
 export const StoreProvider = ({children}) => {
   const [data, setData] = useState({
     words: {},
-    memoryTexts: {}
+    memoryTexts: {},
+    groups: {
+      0: {
+        id: 0,
+        name: 'Genera group'
+      }
+    }
   });
 
   const syncLocalStorage = (s) => {
@@ -34,6 +40,32 @@ export const StoreProvider = ({children}) => {
     }
     setData(newStore)
     syncLocalStorage(newStore)
+  }
+
+  const createGroup = (group) => {
+    setData({
+      ...data,
+      groups: {
+        ...data.groups,
+        [group.id]: group
+      }
+    })
+
+    setData({...data})
+    syncLocalStorage({...data})
+  }
+
+  const updateGroup = (group) => {
+    setData({
+      ...data,
+      groups: {
+        ...data.groups,
+        [group.id]: group
+      }
+    })
+
+    setData({...data})
+    syncLocalStorage({...data})
   }
 
   const addWord = ({word, wordTranslate, example}) => {
@@ -89,13 +121,14 @@ export const StoreProvider = ({children}) => {
     const storage = !!savedStorageStr && JSON.parse(savedStorageStr)
 
     if (storage) {
-      setData(storage)
+      setData({...data, ...storage})
     }
   }, []);
 
 
   return (
-    <StoreContext.Provider value={{data, addWord, removeWord, markLearned, updateWord, addMemoryText, setStore}}>
+    <StoreContext.Provider
+      value={{data, addWord, removeWord, markLearned, updateWord, addMemoryText, setStore, createGroup, updateGroup}}>
       {children}
     </StoreContext.Provider>
   );
