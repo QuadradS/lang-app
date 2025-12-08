@@ -15,8 +15,6 @@ export const WordSidebar = ({selectedWord, onClose, onLearn, onUpdate}) => {
     'bg-[#FFEB3B]': selectedWord?.status === wordStatuses.inProgress,
   })
 
-  console.log(selectedWord)
-
   const onHandleLearn = () => {
     onLearn(selectedWord.id, wordStatuses.learned)
     onClose()
@@ -25,12 +23,13 @@ export const WordSidebar = ({selectedWord, onClose, onLearn, onUpdate}) => {
   const onHandleAdd = (e) => {
     e.preventDefault()
 
-    const formData = new FormData(e.target);
-    const {example} = Object.fromEntries(formData.entries());
+    if(!wordExamples){
+      return
+    }
 
     onUpdate({
       ...selectedWord,
-      example: `${selectedWord.example }\n ${example}`
+      example: `${selectedWord.example }\n ${wordExamples}`
     })
   }
 
@@ -42,12 +41,11 @@ export const WordSidebar = ({selectedWord, onClose, onLearn, onUpdate}) => {
         {selectedWord?.word}
       </h2>
       <h3 className="font-normal">{selectedWord?.wordTranslate}</h3>
-      <p style={{ whiteSpace: 'pre-line' }}>
-        {selectedWord?.example}
+      <p style={{ whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{__html: selectedWord?.example}}>
       </p>
 
       <form onSubmit={onHandleAdd}>
-        <Editor className="bg-[#fff] min-h-[150px]" value={wordExamples} onChange={setWordExamples}/>
+        <Editor className="bg-[#fff] min-h-[150px]" value={wordExamples} onChange={(e) => setWordExamples(e.target.value)}/>
         <Button disabled={!wordExamples} className="w-full text-center block mt-1" size="small" fullWidth>
           Add
         </Button>

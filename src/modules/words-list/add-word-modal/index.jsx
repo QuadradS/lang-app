@@ -1,18 +1,33 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useStore, wordStatuses} from "../../../store/main.jsx";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
-import {TextAreaField} from "../../../components/text-area/index.jsx";
 import Editor from 'react-simple-wysiwyg';
 import {Dropdown} from "primereact/dropdown";
 
-export const AddWordModal = () => {
+export const AddWordModal = ({selectedWordId, onClose}) => {
   const [state, setState] = useState(false);
   const store = useStore();
-  const setModalState = (s) => () => setState(s)
+
   const [wordExample, setWordExample] = useState('');
   const [selectedGroup, setSelectedGroup] = useState(null);
 
+  useEffect(() => {
+    const selectedWord = store.data.words[selectedWordId];
+
+    if (selectedWord) {
+      setState(true)
+      setWordExample(selectedWord.example)
+    }
+
+  }, [selectedWordId]);
+  const setModalState = (s) => () => {
+    if (!s) {
+      onClose && onClose()
+    }
+    setState(s)
+    setWordExample('')
+  }
   if (!state) {
     return (
       <Button size="small" onClick={setModalState(true)}>Add new word</Button>
@@ -24,7 +39,7 @@ export const AddWordModal = () => {
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    const wordId = Object.values(store.data?.words || {}).length
+    const wordId = selectedWordId || Object.values(store.data?.words || {}).length
     const newWord = {
       id: wordId,
       word: data.word,
@@ -37,9 +52,15 @@ export const AddWordModal = () => {
       return
     }
 
-    store.addWord(newWord, selectedGroup?.code)
+    if (selectedWordId) {
+      store.updateWord(newWord)
+    } else {
+      store.addWord(newWord, selectedGroup?.code)
+    }
+
 
     setState(false)
+    onClose && onClose()
   }
 
 
@@ -57,7 +78,8 @@ export const AddWordModal = () => {
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
         <div className="p-4 w-full">
-          <div className="max-w-[900px] bg-[#f6f6fa] rounded relative z-10 p-4 py-2 w-full mx-auto">
+          <div
+            className="max-w-[900px] bg-[#f6f6fa] rounded relative z-10 p-4 py-2 w-full mx-auto max-h-[90vh] overflow-y-auto">
             <h1 className="text-2xl mt-2">Add new word</h1>
 
             <form onSubmit={onSave}>

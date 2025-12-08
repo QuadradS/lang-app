@@ -15,9 +15,8 @@ const showWords = {
 
 export const WordsListModule = () => {
   const store = useStore();
-  console.log('store ', store)
   const [wordStatus, setWordStatus] = useState(showWords.all)
-
+  const [selectedWord, setSelectedWord] = useState()
   const renderWords = () => {
     if (wordStatus === showWords.all) {
       return Object.values(store.data.words)
@@ -47,7 +46,7 @@ export const WordsListModule = () => {
         <h2 className="text-xl">Words list</h2>
 
         <div className="mt-3">
-          <AddWordModal/>
+          <AddWordModal selectedWordId={selectedWord} onClose={() => setSelectedWord(null)}/>
         </div>
 
         <div className="flex mt-3">
@@ -55,7 +54,7 @@ export const WordsListModule = () => {
         </div>
 
         <div className="my-3">
-          <WordsTable words={renderWords()} onUpdateWord={store.updateWord}/>
+          <WordsTable words={renderWords()} onUpdateWord={store.updateWord} onSelectWord={(w) => setSelectedWord(w)}/>
         </div>
 
         {/*<div className="mx-[-5px] mt-3 w-full">*/}

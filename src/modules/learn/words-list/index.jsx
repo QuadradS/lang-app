@@ -23,8 +23,6 @@ export const WordsList = () => {
     return acc
   }, {})
 
-  console.log('words ', words)
-
   const renderWords = () => {
     if (currentStatus === showWords.inProgress) {
       return Object.values(words).filter(({status}) => status === wordStatuses.inProgress)

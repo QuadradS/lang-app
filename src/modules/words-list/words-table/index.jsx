@@ -1,16 +1,11 @@
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
-import {InputText} from "primereact/inputtext";
 import {wordStatuses} from "../../../store/main.jsx";
 import {Tag} from "primereact/tag";
 import classNames from "classnames";
-import {InputTextarea} from "primereact/inputtextarea";
-import {Dropdown} from "primereact/dropdown";
-import {truncateHtml} from "../../../utils/dom.js";
+import {Button} from "primereact/button";
 
-export const WordsTable = ({words, onUpdateWord}) => {
-
-
+export const WordsTable = ({words, onSelectWord}) => {
   const statuses = [
     {
       name: 'Unlearned',
@@ -29,14 +24,6 @@ export const WordsTable = ({words, onUpdateWord}) => {
     }
   ]
 
-  const textEditor = (options) => {
-    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)}/>;
-  };
-
-  const textAreaEditor = (options) => {
-    return <InputTextarea type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)}/>;
-  };
-
   const getSeverity = (v) => {
     return classNames({
       'danger': v === wordStatuses.unlearned,
@@ -44,21 +31,6 @@ export const WordsTable = ({words, onUpdateWord}) => {
       'warning': v === wordStatuses.inProgress,
     })
   }
-
-  const statusEditor = (options) => {
-    return (
-      <Dropdown
-        value={options.value}
-        options={statuses}
-        optionLabel="name"
-        onChange={(e) => options.editorCallback(e.value)}
-        placeholder="Select a Status"
-        itemTemplate={(option) => {
-          return <Tag value={option.name} severity={getSeverity(option.code)}></Tag>;
-        }}
-      />
-    );
-  };
 
   const getValue = (v) => {
     return classNames({
@@ -72,31 +44,25 @@ export const WordsTable = ({words, onUpdateWord}) => {
     return <Tag value={getValue(status)} severity={getSeverity(status)}></Tag>;
   }
 
-  const textBody = ({ example }) => {
-    if (!example) return null;
-
+  const editBody = ({id}) => {
     return (
-      <div className='truncate max-w-[250px]' dangerouslySetInnerHTML={{ __html: example }} />
+      <div className='flex justify-between'>
+        <Button onClick={() => onSelectWord(id)} icon="pi pi-pencil" rounded outlined severity="secondary" aria-label="Bookmark" />
+        <Button icon="pi pi-times" rounded outlined severity="danger" aria-label="Cancel" />
+      </div>
     );
   };
 
-  const onRowEditComplete = (e) => {
-    onUpdateWord({
-      ...e.newData
-    })
-  }
 
   return (
-    <DataTable sortOrder={-1} stripedRows emptyMessage={"List is empty"} value={words} editMode="row" dataKey="id"
-               onRowEditComplete={onRowEditComplete} tableStyle={{minWidth: '50rem'}}>
-      <Column sortable field="word" header="Word" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
-      <Column sortable field="wordTranslate" header="Word translate" editor={(options) => textEditor(options)}
-              style={{width: '20%'}}/>
-      <Column sortable field="example" body={textBody} se header="Word example" editor={(options) => textAreaEditor(options)}
-              style={{width: '20%'}}/>
-      <Column sortable field="status" header="Status" body={statusBodyTemplate} editor={(options) => statusEditor(options)}
-              style={{width: '20%'}}></Column>
-      <Column rowEditor headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}></Column>
+    <DataTable sortOrder={-1} stripedRows emptyMessage={"List is empty"} value={words} dataKey="id"
+               tableStyle={{minWidth: '50rem'}}>
+      <Column sortable field="word" header="Word" style={{width: '20%'}}/>
+      <Column sortable field="wordTranslate" header="Word translate" style={{width: '20%'}}/>
+      <Column sortable field="status" header="Status" body={statusBodyTemplate} style={{width: '20%'}}></Column>
+      <Column headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}}/>
+      <Column headerStyle={{width: '10%', minWidth: '8rem'}} bodyStyle={{textAlign: 'center'}} body={editBody}>
+      </Column>
     </DataTable>
   )
 }
