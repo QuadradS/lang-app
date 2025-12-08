@@ -1,26 +1,53 @@
 import {Button} from "primereact/button";
 import {useEffect, useState} from "react";
-import {Card} from "primereact/card";
 import {InputText} from "primereact/inputtext";
 import {useStore} from "../../../store/main.jsx";
-import {Tag} from "primereact/tag";
+import {VirtualScroller} from 'primereact/virtualscroller';
+import {RadioButton} from "primereact/radiobutton";
+import {Panel} from "primereact/panel";
+import {Divider} from "primereact/divider";
 
-export const CreateGroupModal = () => {
+export const CreateGroupModal = ({groupId, onClose}) => {
   const [state, setState] = useState(false);
-  const setModalState = (s) => () => setState(s)
-
   const [selectedWords, setWords] = useState({})
+  const [groupName, setGroupName] = useState('')
+
+  const setModalState = (s) => () => {
+    if (!s && onClose) {
+      onClose()
+    }
+    setState(s)
+  }
   const store = useStore()
 
-  console.log('selectedWords ', selectedWords)
+  useEffect(() => {
+    if (!state) {
+      setWords({})
+      setGroupName('')
+      onClose && onClose()
+    }
+  }, [state]);
 
   useEffect(() => {
-    setWords({})
-  }, [state]);
+    const group = store.data.groups[groupId]
+
+    if (group) {
+      const groupWords = Object.values(group.words).reduce((acc, item) => {
+        if (store.data.words[item]) {
+          acc[item] = store.data.words[item]
+        }
+        return acc
+      }, {})
+
+      setGroupName(group.name)
+      setWords(groupWords || {})
+      setState(true)
+    }
+  }, [groupId]);
 
   const onSelect = (w) => () => {
     if (selectedWords[w.id]) {
-      delete selectedWords[w]
+      delete selectedWords[w.id]
       setWords({...selectedWords})
     } else {
       setWords({
@@ -34,15 +61,28 @@ export const CreateGroupModal = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+    const selectedWordsIds = Object.values(selectedWords).map(({id}) => id).reduce((acc, item) => {
+      acc[item] = item
+      return acc
+    }, {})
+    const group = store.data.groups[groupId]
 
-    console.log('data ', data)
+    if (group) {
+      store.updateGroup({
+        id: group.id,
+        name: data.groupName,
+        words: selectedWordsIds
+      })
+    } else {
+      store.createGroup({
+        id: Object.values(store.data.groups).length || 0,
+        name: data.groupName,
+        words: selectedWordsIds
+      })
+    }
 
+    setState(false)
 
-    store.createGroup({
-      id: Object.values(store.data.groups).length || 0,
-      name: data.groupName,
-      words: selectedWords
-    })
   }
 
 
@@ -52,6 +92,18 @@ export const CreateGroupModal = () => {
     )
   }
 
+  const itemTemplate = (item) => {
+    return (
+      <>
+        <div key={item.id} className="flex align-items-center cursor-pointer" onClick={onSelect(item)}>
+          <RadioButton name="category" value={item.id} checked={!!selectedWords[item.id]}/>
+          <label htmlFor={item.id} className="ml-1 cursor-pointer text-sm ">{item.word} - {item.wordTranslate}</label>
+        </div>
+        <Divider/>
+      </>
+    );
+  };
+
   return (
     <>
       <Button size="small" onClick={setModalState(false)}>Close</Button>
@@ -59,24 +111,20 @@ export const CreateGroupModal = () => {
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
         <form onSubmit={onCreateGroup} className="p-4 w-full">
-          <div className="max-w-[500px] relative z-10 p-4 w-full mx-auto max-h-[90vh]">
-            <Card title="Create group">
-              <InputText placeholder='Group name' name='groupName' className="w-full"/>
-              <div className="mt-2 w-full">
-                <p className='m-0'>Words</p>
-                <div className="w-full max-h-[150px] overflow-y-auto">
-                  {Object.values(store.data.words).map((w) => (
-                    <Tag onClick={onSelect(w)} severity={selectedWords[w.id] ? "success" : "info"}
-                         className="mr-1 cursor-pointer" key={w.id} title='Words'>{w.word}</Tag>
-                  ))}
-                </div>
+          <Panel header="Group options" className="max-w-[500px] relative z-10 p-4 w-full mx-auto">
+            <InputText
+              required value={groupName} placeholder='Group name' name='groupName' className="w-full"
+              onChange={(e) => setGroupName(e.target.value)}
+            />
 
-              </div>
-              <Button size="small" className="block mt-3">Create</Button>
-            </Card>
-          </div>
-
-
+            <p className='m-0 font-bold mt-5 mb-4'>Words</p>
+            <VirtualScroller
+              items={Object.values(store.data.words)} itemSize={50} itemTemplate={itemTemplate}
+              className="w-full"
+              style={{height: '200px'}}
+            />
+            <Button size="small" className="block mt-3">Submit</Button>
+          </Panel>
         </form>
       </div>
     </>

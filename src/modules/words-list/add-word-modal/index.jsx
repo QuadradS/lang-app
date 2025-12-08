@@ -1,13 +1,17 @@
 import {useState} from "react";
-import {useStore} from "../../../store/main.jsx";
+import {useStore, wordStatuses} from "../../../store/main.jsx";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
-import {InputTextarea} from "primereact/inputtextarea";
+import {TextAreaField} from "../../../components/text-area/index.jsx";
+import Editor from 'react-simple-wysiwyg';
+import {Dropdown} from "primereact/dropdown";
 
 export const AddWordModal = () => {
   const [state, setState] = useState(false);
   const store = useStore();
   const setModalState = (s) => () => setState(s)
+  const [wordExample, setWordExample] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState(null);
 
   if (!state) {
     return (
@@ -15,23 +19,35 @@ export const AddWordModal = () => {
     )
   }
 
-  const onSave = (e) => {
+  const onSave = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-
-    if (data.word && data.wordTranslate) {
-      store.addWord({
-        id: Object.values(store.data?.words || {}).length,
-        word: data.word,
-        wordTranslate: data.wordTranslate,
-        example: data.example,
-      })
+    const wordId = Object.values(store.data?.words || {}).length
+    const newWord = {
+      id: wordId,
+      word: data.word,
+      wordTranslate: data.wordTranslate,
+      example: wordExample,
+      status: wordStatuses.unlearned,
     }
+
+    if (!data.word || !data.wordTranslate) {
+      return
+    }
+
+    store.addWord(newWord, selectedGroup?.code)
 
     setState(false)
   }
+
+
+  function onChange(e) {
+    setWordExample(e.target.value);
+  }
+
+  const items = Object.values(store.data.groups || {}).map(({id, name}) => ({name, code: id}))
 
   return (
     <>
@@ -41,16 +57,26 @@ export const AddWordModal = () => {
         <div className="absolute cursor-pointer z-9 left-0 right-0 top-0 bottom-0" onClick={setModalState(false)}/>
 
         <div className="p-4 w-full">
-          <div className="max-w-[500px] bg-[#f6f6fa] rounded relative z-10 p-4 py-2 w-full mx-auto">
+          <div className="max-w-[900px] bg-[#f6f6fa] rounded relative z-10 p-4 py-2 w-full mx-auto">
             <h1 className="text-2xl mt-2">Add new word</h1>
 
-            <form onSubmit={onSave} className="w-full flex flex-wrap flex-col">
+            <form onSubmit={onSave}>
               <InputText placeholder="Word" className="w-full mt-2" name={'word'} required label="Word"/>
-              <InputText placeholder="Word translate" className="w-full mt-2" name={'wordTranslate'} required label="Word translate"/>
-              <InputTextarea placeholder="Example" className="mt-2 w-full" name={'example'}/>
-              <div className="mt-6 w-full">
-                <Button size="small">Save</Button>
+              <InputText placeholder="Words transalate" className="w-full mt-2" name={'wordTranslate'} required
+                         label="Word's transalate"/>
+              <Dropdown
+                value={selectedGroup}
+                onChange={(e) => setSelectedGroup(e.value)}
+                options={items}
+                optionLabel="name"
+                placeholder="Select a group"
+                className="w-full mt-2"
+              />
+
+              <div className="w-full mt-2">
+                <Editor className="bg-[#fff] min-h-[150px]" value={wordExample} onChange={onChange}/>
               </div>
+              <Button size="small" className="mt-2">Save</Button>
             </form>
           </div>
         </div>

@@ -15,6 +15,7 @@ const showWords = {
 
 export const WordsListModule = () => {
   const store = useStore();
+  console.log('store ', store)
   const [wordStatus, setWordStatus] = useState(showWords.all)
 
   const renderWords = () => {

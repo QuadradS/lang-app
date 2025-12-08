@@ -6,6 +6,7 @@ import {Tag} from "primereact/tag";
 import classNames from "classnames";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Dropdown} from "primereact/dropdown";
+import {truncateHtml} from "../../../utils/dom.js";
 
 export const WordsTable = ({words, onUpdateWord}) => {
 
@@ -71,12 +72,13 @@ export const WordsTable = ({words, onUpdateWord}) => {
     return <Tag value={getValue(status)} severity={getSeverity(status)}></Tag>;
   }
 
-  const textBody = ({example}) => {
-    if(example?.length > 20) {
-      return `${example?.slice(0,20)} ...`
-    }
-    return example
-  }
+  const textBody = ({ example }) => {
+    if (!example) return null;
+
+    return (
+      <div className='truncate max-w-[250px]' dangerouslySetInnerHTML={{ __html: example }} />
+    );
+  };
 
   const onRowEditComplete = (e) => {
     onUpdateWord({
@@ -90,7 +92,7 @@ export const WordsTable = ({words, onUpdateWord}) => {
       <Column sortable field="word" header="Word" editor={(options) => textEditor(options)} style={{width: '20%'}}/>
       <Column sortable field="wordTranslate" header="Word translate" editor={(options) => textEditor(options)}
               style={{width: '20%'}}/>
-      <Column sortable field="example" body={textBody} header="Word example" editor={(options) => textAreaEditor(options)}
+      <Column sortable field="example" body={textBody} se header="Word example" editor={(options) => textAreaEditor(options)}
               style={{width: '20%'}}/>
       <Column sortable field="status" header="Status" body={statusBodyTemplate} editor={(options) => statusEditor(options)}
               style={{width: '20%'}}></Column>

@@ -13,12 +13,7 @@ export const StoreProvider = ({children}) => {
   const [data, setData] = useState({
     words: {},
     memoryTexts: {},
-    groups: {
-      0: {
-        id: 0,
-        name: 'Genera group'
-      }
-    }
+    groups: {}
   });
 
   const syncLocalStorage = (s) => {
@@ -43,47 +38,57 @@ export const StoreProvider = ({children}) => {
   }
 
   const createGroup = (group) => {
-    setData({
+    const updatedData = {
       ...data,
       groups: {
         ...data.groups,
         [group.id]: group
       }
-    })
+    }
 
-    setData({...data})
-    syncLocalStorage({...data})
+    setData(updatedData)
+    syncLocalStorage(updatedData)
   }
 
   const updateGroup = (group) => {
-    setData({
+    const updatedData = {
       ...data,
       groups: {
         ...data.groups,
         [group.id]: group
       }
-    })
+    }
 
-    setData({...data})
-    syncLocalStorage({...data})
+    setData(updatedData)
+    syncLocalStorage(updatedData)
   }
 
-  const addWord = ({word, wordTranslate, example}) => {
-    const newStore = {
+  const addWord = (word, groupId) => {
+    const updatedData = {
       ...data,
       words: {
         ...data.words,
-        [Object.keys(data.words).length]: {
-          id: Object.keys(data.words).length,
-          word,
-          wordTranslate,
-          status: wordStatuses.unlearned,
-          example
+        [word.id]: word
+      },
+    }
+
+    const groupToUpdate = data.groups[groupId]
+
+    if (groupToUpdate) {
+      updatedData.groups = {
+        ...updatedData.groups,
+        [groupId]: {
+          ...groupToUpdate,
+          words: {
+            ...groupToUpdate.words,
+            [word.id]: word.id,
+          }
         }
       }
     }
-    setData(newStore)
-    syncLocalStorage(newStore)
+
+    setData(updatedData)
+    syncLocalStorage(updatedData)
   }
 
   const removeWord = (wordId) => {

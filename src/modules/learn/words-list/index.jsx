@@ -14,9 +14,16 @@ export const WordsList = () => {
 
   const store = useStore()
   const {groupId} = useParams()
-  console.log(store.data.groups)
 
-  const words = store.data.groups[groupId].words
+  const wordsIds = store?.data?.groups[groupId]?.words || {}
+  const words = Object.values(wordsIds).reduce((acc, item) => {
+    if (store.data.words[item]) {
+      acc[item] = store.data.words[item]
+    }
+    return acc
+  }, {})
+
+  console.log('words ', words)
 
   const renderWords = () => {
     if (currentStatus === showWords.inProgress) {

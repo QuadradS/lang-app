@@ -3,14 +3,19 @@ import {Button} from "primereact/button";
 import classNames from "classnames";
 import {wordStatuses} from "../../../store/main.jsx";
 import {InputTextarea} from "primereact/inputtextarea";
+import {VirtualScroller} from "primereact/virtualscroller";
+import Editor from "react-simple-wysiwyg";
+import {useEffect, useState} from "react";
 
 export const WordSidebar = ({selectedWord, onClose, onLearn, onUpdate}) => {
-
+  const [wordExamples, setWordExamples] = useState()
   const status = classNames('w-[10px] h-[10px] rounded-[50%] absolute left-[10px] top-[10px]', {
     'bg-[tomato]': selectedWord?.status === wordStatuses.unlearned,
     'bg-[#009688]': selectedWord?.status === wordStatuses.learned,
     'bg-[#FFEB3B]': selectedWord?.status === wordStatuses.inProgress,
   })
+
+  console.log(selectedWord)
 
   const onHandleLearn = () => {
     onLearn(selectedWord.id, wordStatuses.learned)
@@ -42,8 +47,8 @@ export const WordSidebar = ({selectedWord, onClose, onLearn, onUpdate}) => {
       </p>
 
       <form onSubmit={onHandleAdd}>
-        <InputTextarea className="w-full min-h-[140px]" name='example'/>
-        <Button  className="w-full text-center block mt-1" size="small" fullWidth>
+        <Editor className="bg-[#fff] min-h-[150px]" value={wordExamples} onChange={setWordExamples}/>
+        <Button disabled={!wordExamples} className="w-full text-center block mt-1" size="small" fullWidth>
           Add
         </Button>
       </form>
