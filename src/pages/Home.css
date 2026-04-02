@@ -1,0 +1,159 @@
+.home-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.home-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.language-pair {
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.change-link {
+  font-size: 0.875rem;
+  color: #646cff;
+}
+
+.groups-section h2 {
+  margin-bottom: 1rem;
+  color: #213547;
+}
+
+.add-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.add-group input {
+  flex: 1;
+  padding: 0.2rem 0;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1.5px solid #a0a0a0;
+  border-radius: 0;
+  background: none;
+}
+
+.add-group input:focus {
+  outline: none;
+  border-bottom-color: #646cff;
+}
+
+.add-group button {
+  padding: 0.2rem 0.6rem;
+  font-size: 1rem;
+  background: #646cff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.add-group button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.group-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px 12px 12px 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.group-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.group-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.group-card-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #213547;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.group-card-count {
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.default-badge {
+  font-size: 0.7rem;
+  background: #e8e8ff;
+  color: #646cff;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.group-card .delete-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.group-card .delete-btn:hover {
+  color: #e53935;
+}
+
+.data-section {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.data-btn {
+  padding: 0.2rem 0.5rem;
+  font-size: 1rem;
+  background: #f0f0f0;
+  color: #555;
+  border: none;
+  border-radius: 4px;
+}
+
+.data-btn:hover {
+  background: #e4e4e4;
+  color: #333;
+}
