@@ -9,7 +9,7 @@
 }
 
 .back-link {
-  color: #646cff;
+  color: var(--accent);
   text-decoration: none;
   font-size: 0.875rem;
   display: block;
@@ -55,15 +55,16 @@
   font-weight: bold;
   padding: 0.15rem 0;
   border: none;
-  border-bottom: 2px solid #646cff;
+  border-bottom: 2px solid var(--accent);
   border-radius: 0;
   background: none;
+  color: var(--text);
   flex: 1;
 }
 
 .group-edit-row input[type="text"]:focus {
   outline: none;
-  border-bottom-color: #535bf2;
+  border-bottom-color: var(--accent-hover);
 }
 
 .group-color-picker {
@@ -81,12 +82,12 @@
 }
 
 .group-color-picker::-webkit-color-swatch {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border);
   border-radius: 8px;
 }
 
 .group-color-picker::-moz-color-swatch {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border);
   border-radius: 8px;
 }
 
@@ -103,15 +104,15 @@
 }
 
 .word-count {
-  color: #666;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .add-word-btn {
   padding: 0.2rem 0.6rem;
   font-size: 1rem;
-  background: #646cff;
-  color: white;
+  background: var(--accent);
+  color: #fff;
   border: none;
   border-radius: 4px;
 }
@@ -127,8 +128,8 @@
 .status-tab {
   padding: 0.2rem 0.6rem;
   font-size: 1rem;
-  background: #f0f0f0;
-  color: #888;
+  background: var(--neutral-bg);
+  color: var(--text-muted);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -139,13 +140,13 @@
 }
 
 .status-tab:hover {
-  background: #e4e4e4;
-  color: #555;
+  background: var(--neutral-hover-bg);
+  color: var(--neutral-hover-text);
 }
 
 .status-tab.active {
-  background: #646cff;
-  color: white;
+  background: var(--accent);
+  color: #fff;
 }
 
 .tab-count {
@@ -155,7 +156,7 @@
 
 .empty-message {
   text-align: center;
-  color: #666;
+  color: var(--text-secondary);
   padding: 2rem;
 }
 
@@ -170,15 +171,27 @@
   margin: 0;
 }
 
+@media (max-width: 1024px) {
+  .word-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .word-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .word-item {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   padding: 0.75rem;
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 4px 12px 12px 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px var(--shadow);
   transition: box-shadow 0.2s, transform 0.2s;
   min-width: 0;
   overflow: hidden;
@@ -186,7 +199,7 @@
 }
 
 .word-item:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px var(--shadow);
   transform: translateY(-2px);
 }
 
@@ -201,7 +214,7 @@
 .word-original {
   font-weight: 600;
   font-size: 0.95rem;
-  color: #213547;
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -209,7 +222,7 @@
 
 .word-translation {
   font-size: 0.8rem;
-  color: #888;
+  color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -217,7 +230,7 @@
 
 .word-example {
   font-size: 0.75rem;
-  color: #aaa;
+  color: var(--text-muted);
   font-style: italic;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -243,24 +256,24 @@
 }
 
 .word-status-badge.status-new {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: var(--status-new-bg);
+  color: var(--status-new-text);
 }
 
 .word-status-badge.status-in_progress {
-  background: #fff3e0;
-  color: #ef6c00;
+  background: var(--status-progress-bg);
+  color: var(--status-progress-text);
 }
 
 .word-status-badge.status-learned {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--status-learned-bg);
+  color: var(--status-learned-text);
 }
 
 .delete-btn {
   background: none;
   border: none;
-  color: #ccc;
+  color: var(--border);
   font-size: 1.1rem;
   cursor: pointer;
   padding: 0 0.2rem;
@@ -270,13 +283,13 @@
 }
 
 .delete-btn:hover {
-  color: #e53935;
+  color: var(--danger);
 }
 
 .edit-btn {
   background: none;
   border: none;
-  color: #ccc;
+  color: var(--border);
   font-size: 1.2rem;
   cursor: pointer;
   padding: 0 0.5rem;
@@ -285,7 +298,7 @@
 }
 
 .edit-btn:hover {
-  color: #646cff;
+  color: var(--accent);
 }
 
 /* Modal */
@@ -293,7 +306,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -301,22 +314,20 @@
 }
 
 .modal {
-  background: #fff;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 2rem;
   width: 100%;
   max-width: 460px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.modal {
+  box-shadow: 0 8px 32px var(--shadow);
   text-align: center;
 }
 
 .modal h2 {
   margin: 0 0 1.25rem;
   font-size: 1.25rem;
-  color: #213547;
+  color: var(--text);
 }
 
 .modal-form {
@@ -331,7 +342,7 @@
   gap: 0.35rem;
   font-size: 1rem;
   font-weight: 500;
-  color: #555;
+  color: var(--text-secondary);
 }
 
 .modal-form input,
@@ -340,17 +351,23 @@
   font-size: 1rem;
   text-align: center;
   border: none;
-  border-bottom: 1.5px solid #a0a0a0;
+  border-bottom: 1.5px solid var(--input-border);
   border-radius: 0;
   background: none;
+  color: var(--text);
   font-family: inherit;
   resize: vertical;
+}
+
+.modal-form input::placeholder,
+.modal-form textarea::placeholder {
+  color: var(--text-muted);
 }
 
 .modal-form input:focus,
 .modal-form textarea:focus {
   outline: none;
-  border-bottom-color: #646cff;
+  border-bottom-color: var(--accent);
 }
 
 .modal-actions {
@@ -363,29 +380,30 @@
 .save-btn {
   padding: 0.2rem 0.6rem;
   font-size: 1rem;
-  background: #646cff;
-  color: white;
+  background: var(--accent);
+  color: #fff;
   border: none;
   border-radius: 4px;
 }
 
 .save-btn:disabled {
-  background: #ccc;
+  background: var(--neutral-bg);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
 .cancel-btn {
   padding: 0.2rem 0.6rem;
   font-size: 1rem;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
   border: none;
   border-radius: 4px;
 }
 
 .cancel-btn:hover {
-  background: #e4e4e4;
-  color: #333;
+  background: var(--neutral-hover-bg);
+  color: var(--neutral-hover-text);
 }
 
 /* View modal */
@@ -405,23 +423,23 @@
 
 .view-modal-header .edit-btn {
   font-size: 1.1rem;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .view-translation {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 1rem;
 }
 
 .view-example-section {
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   padding-top: 1rem;
 }
 
 .view-example-section h3 {
   font-size: 1rem;
-  color: #999;
+  color: var(--text-muted);
   margin: 0 0 0.5rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -430,7 +448,7 @@
 
 .view-example {
   font-size: 0.95rem;
-  color: #444;
+  color: var(--text-secondary);
   font-style: italic;
   margin: 0;
   line-height: 1.5;
@@ -438,14 +456,14 @@
 }
 
 .view-status-section {
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   padding-top: 1rem;
   margin-top: 1rem;
 }
 
 .view-status-section h3 {
   font-size: 1rem;
-  color: #999;
+  color: var(--text-muted);
   margin: 0 0 0.5rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -464,26 +482,26 @@
   border-radius: 4px;
   cursor: pointer;
   border: none;
-  background: #f0f0f0;
-  color: #666;
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
   transition: all 0.15s;
 }
 
 .status-btn:hover {
-  background: #e4e4e4;
+  background: var(--neutral-hover-bg);
 }
 
 .status-btn.status-new.active {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: var(--status-new-bg);
+  color: var(--status-new-text);
 }
 
 .status-btn.status-in_progress.active {
-  background: #fff3e0;
-  color: #ef6c00;
+  background: var(--status-progress-bg);
+  color: var(--status-progress-text);
 }
 
 .status-btn.status-learned.active {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--status-learned-bg);
+  color: var(--status-learned-text);
 }
