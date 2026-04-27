@@ -36,8 +36,12 @@ export function Group() {
   // View modal
   const [viewingWord, setViewingWord] = useState<Word | null>(null)
 
+  const BATCH_SIZE = 10
+
   // Practice modal
   const [practiceModalOpen, setPracticeModalOpen] = useState(false)
+  const [practiceAllWords, setPracticeAllWords] = useState<Word[]>([])
+  const [practiceBatchStart, setPracticeBatchStart] = useState(0)
   const [practiceWords, setPracticeWords] = useState<Word[]>([])
   const [practiceIndex, setPracticeIndex] = useState(0)
   const [practiceInput, setPracticeInput] = useState('')
@@ -163,7 +167,10 @@ export function Group() {
   }
 
   const openPracticeModal = () => {
-    resetPracticeRound(shuffle(inProgressWords))
+    const allShuffled = shuffle(inProgressWords)
+    setPracticeAllWords(allShuffled)
+    setPracticeBatchStart(0)
+    resetPracticeRound(allShuffled.slice(0, BATCH_SIZE))
     setPracticeModalOpen(true)
   }
 
@@ -173,7 +180,21 @@ export function Group() {
   }
 
   const repeatPractice = () => {
-    resetPracticeRound(shuffle(inProgressWords))
+    const allShuffled = shuffle(inProgressWords)
+    setPracticeAllWords(allShuffled)
+    setPracticeBatchStart(0)
+    resetPracticeRound(allShuffled.slice(0, BATCH_SIZE))
+  }
+
+  const continuePractice = () => {
+    const nextStart = practiceBatchStart + BATCH_SIZE
+    setPracticeBatchStart(nextStart)
+    resetPracticeRound(practiceAllWords.slice(nextStart, nextStart + BATCH_SIZE))
+  }
+
+  const finishEarly = () => {
+    clearPracticeTimer()
+    setPracticeFinished(true)
   }
 
   const switchPracticeMode = (mode: 'type' | 'choose') => {
@@ -517,13 +538,21 @@ export function Group() {
                 </div>
                 <div className="modal-actions">
                   <button className="cancel-btn" onClick={closePracticeModal}>Close</button>
-                  <button className="save-btn" onClick={repeatPractice}>Repeat</button>
+                  <button className="save-btn" onClick={
+                    practiceBatchStart + BATCH_SIZE < practiceAllWords.length
+                      ? continuePractice
+                      : repeatPractice
+                  }>
+                    {practiceBatchStart + BATCH_SIZE < practiceAllWords.length ? 'Continue →' : 'Practice Again'}
+                  </button>
                 </div>
               </>
             ) : practiceWords[practiceIndex] ? (
               <>
                 <div className="practice-top-bar">
-                  <span className="practice-progress">{practiceIndex + 1} / {practiceWords.length}</span>
+                  <span className="practice-progress">
+                    {practiceBatchStart + practiceIndex + 1} / {practiceAllWords.length}
+                  </span>
                   <div className="practice-mode-toggle">
                     <button className={`practice-mode-btn${practiceMode === 'type' ? ' active' : ''}`} onClick={() => switchPracticeMode('type')}>Type</button>
                     <button className={`practice-mode-btn${practiceMode === 'choose' ? ' active' : ''}`} onClick={() => switchPracticeMode('choose')}>Choose</button>
@@ -584,6 +613,7 @@ export function Group() {
                 </div>
                 <div className="modal-actions">
                   <button className="cancel-btn" onClick={closePracticeModal}>Close</button>
+                  <button className="cancel-btn" onClick={finishEarly}>Finish</button>
                   {!practiceFeedback && practiceMode === 'type' && (
                     <button
                       className="save-btn"
