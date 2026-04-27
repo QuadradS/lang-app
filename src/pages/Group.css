@@ -117,6 +117,22 @@
   border-radius: 4px;
 }
 
+.export-btn {
+  padding: 0.2rem 0.6rem;
+  font-size: 1rem;
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.export-btn:hover {
+  background: var(--neutral-hover-bg);
+  color: var(--neutral-hover-text);
+}
+
 /* Status tabs */
 
 .status-tabs {
@@ -303,6 +319,38 @@
 
 /* Modal */
 
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlayFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modalSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -311,9 +359,15 @@
   align-items: center;
   justify-content: center;
   z-index: 100;
+  animation: overlayFadeIn 0.2s ease;
+}
+
+.modal-overlay.closing {
+  animation: overlayFadeOut 0.2s ease forwards;
 }
 
 .modal {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -322,6 +376,98 @@
   max-width: 460px;
   box-shadow: 0 8px 32px var(--shadow);
   text-align: center;
+  animation: modalSlideIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.modal-overlay.closing .modal {
+  animation: modalSlideOut 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--neutral-bg);
+  border: none;
+  color: var(--text);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.modal-close-btn:hover {
+  background: var(--neutral-hover-bg);
+  color: #fff;
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    max-width: 100%;
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-top: 4rem;
+    animation: modalSlideInMobile 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .modal-overlay.closing .modal {
+    animation: modalSlideOutMobile 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .practice-modal {
+    max-height: none;
+  }
+
+  .practice-top-bar {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    z-index: 10;
+    margin-bottom: 1rem;
+  }
+
+  .modal-close-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 200;
+    background: var(--neutral-bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0;
+    color: var(--text-secondary);
+  }
+}
+
+@keyframes modalSlideInMobile {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes modalSlideOutMobile {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
 }
 
 .modal h2 {
@@ -504,4 +650,455 @@
 .status-btn.status-learned.active {
   background: var(--status-learned-bg);
   color: var(--status-learned-text);
+}
+
+/* Practice button */
+
+.practice-btn-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+@keyframes practiceGlow {
+  0%, 100% { box-shadow: 0 0 10px 2px rgba(74, 222, 128, 0.18), 0 4px 16px rgba(0,0,0,0.4); }
+  50%       { box-shadow: 0 0 22px 6px rgba(74, 222, 128, 0.36), 0 4px 16px rgba(0,0,0,0.4); }
+}
+
+.practice-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 2.5rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+  color: #4ade80;
+  border: 2px solid #22c55e;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+  animation: practiceGlow 2.4s ease-in-out infinite;
+  letter-spacing: 0.03em;
+}
+
+.practice-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+.practice-btn:active {
+  transform: translateY(0) scale(0.97);
+  filter: brightness(0.95);
+}
+
+.practice-btn-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.practice-btn-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+}
+
+.practice-btn-count {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.7;
+  letter-spacing: 0;
+}
+
+.practice-empty {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0;
+}
+
+.practice-empty strong {
+  color: var(--status-progress-text);
+}
+
+/* Practice modal */
+
+.practice-modal {
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.practice-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-right: 2.25rem;
+}
+
+.practice-progress {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.practice-mode-toggle {
+  display: flex;
+  gap: 0.2rem;
+  background: var(--neutral-bg);
+  border-radius: 6px;
+  padding: 0.2rem;
+}
+
+.practice-mode-btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.practice-mode-btn.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.practice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.practice-option {
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+  font-family: inherit;
+}
+
+.practice-option:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(100, 108, 255, 0.07);
+}
+
+.practice-option:disabled {
+  cursor: default;
+}
+
+.practice-option.option-correct {
+  border-color: var(--status-learned-text);
+  background: var(--status-learned-bg);
+  color: var(--status-learned-text);
+}
+
+.practice-option.option-wrong {
+  border-color: var(--danger);
+  background: #3b1010;
+  color: var(--danger);
+}
+
+.practice-option.option-dim {
+  opacity: 0.35;
+}
+
+@keyframes practiceSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.practice-slide {
+  animation: practiceSlideIn 0.33s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.practice-word {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.practice-translation {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.4rem;
+  cursor: pointer;
+  transition: filter 0.2s;
+  user-select: none;
+  min-height: 2rem;
+}
+
+.practice-translation.blurred {
+  filter: blur(8px);
+}
+
+.practice-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+}
+
+.practice-answer-area {
+  min-height: 52px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.practice-input {
+  width: 100%;
+  padding: 0.4rem 0;
+  font-size: 1.1rem;
+  text-align: center;
+  border: none;
+  border-bottom: 1.5px solid var(--input-border);
+  border-radius: 0;
+  background: none;
+  color: var(--text);
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 0.25rem;
+}
+
+.practice-input::placeholder {
+  color: var(--text-muted);
+}
+
+.practice-input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.practice-feedback {
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.practice-feedback-correct {
+  background: var(--status-learned-bg);
+  color: var(--status-learned-text);
+}
+
+.practice-feedback-wrong {
+  background: #3b1010;
+  color: var(--danger);
+}
+
+/* Practice stats screen */
+
+.practice-finished-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.75rem;
+}
+
+.practice-stats {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.practice-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--neutral-bg);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  min-width: 100px;
+}
+
+.practice-stat-correct {
+  background: var(--status-learned-bg);
+}
+
+.practice-stat-wrong {
+  background: #3b1010;
+}
+
+.practice-stat-count {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.practice-stat-correct .practice-stat-count {
+  color: var(--status-learned-text);
+}
+
+.practice-stat-wrong .practice-stat-count {
+  color: var(--danger);
+}
+
+.practice-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.practice-accuracy {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.25rem;
+}
+
+.practice-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  text-align: left;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-bottom: 0.25rem;
+}
+
+.practice-result-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.practice-result-heading {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.15rem;
+}
+
+.practice-result-heading-correct {
+  color: var(--status-learned-text);
+}
+
+.practice-result-heading-wrong {
+  color: var(--danger);
+}
+
+.practice-result-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.practice-result-row-correct {
+  background: var(--status-learned-bg);
+}
+
+.practice-result-row-wrong {
+  background: #3b1010;
+  align-items: flex-start;
+}
+
+.wrong-result-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  text-align: left;
+}
+
+.wrong-answer-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.wrong-answer-label {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.wrong-answer-value {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.wrong-answer-correct {
+  color: var(--status-learned-text);
+  font-weight: 500;
+}
+
+.practice-result-original {
+  font-weight: 600;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.practice-result-sep {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.practice-result-translation {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.mark-learned-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.72rem;
+  font-family: inherit;
+  background: none;
+  border: 1px solid var(--status-learned-text);
+  color: var(--status-learned-text);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mark-learned-btn:hover {
+  background: var(--status-learned-bg);
+}
+
+.result-learned {
+  opacity: 0.7;
+}
+
+.result-learned-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: var(--status-learned-text);
+  white-space: nowrap;
 }
